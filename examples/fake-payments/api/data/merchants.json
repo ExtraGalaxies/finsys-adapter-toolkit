@@ -1,0 +1,36 @@
+{
+  "_comment": "Reference data for the fake payment-network API. Three personas span the merchant spectrum the demo shows: A=strong (high volume, low disputes, long tenure), B=mid (moderate everything), C=weak (low volume, concentrated customers, frequent disputes). Keyed by IC — same lookup key as the fake-telco-api so the same identity drives both adapters.",
+  "850101015432": {
+    "persona": "A",
+    "merchantName": "Hassan Trading Sdn Bhd",
+    "merchantSince": "2022-03-15",
+    "monthlyVolumeMyrT3": 285000,
+    "monthlyVolumeMyrT12": 240000,
+    "arpuStability12m": 0.92,
+    "disputeRate12m": 0.0008,
+    "customerConcentrationTop5Pct": 0.18,
+    "activeTenureMonths": 38
+  },
+  "920514075321": {
+    "persona": "B",
+    "merchantName": "Bee Lin Beauty Sdn Bhd",
+    "merchantSince": "2023-09-10",
+    "monthlyVolumeMyrT3": 95000,
+    "monthlyVolumeMyrT12": 88000,
+    "arpuStability12m": 0.78,
+    "disputeRate12m": 0.004,
+    "customerConcentrationTop5Pct": 0.33,
+    "activeTenureMonths": 22
+  },
+  "991230146789": {
+    "persona": "C",
+    "merchantName": "Chong Wei Catering",
+    "merchantSince": "2025-05-01",
+    "monthlyVolumeMyrT3": 12500,
+    "monthlyVolumeMyrT12": 18400,
+    "arpuStability12m": 0.34,
+    "disputeRate12m": 0.027,
+    "customerConcentrationTop5Pct": 0.71,
+    "activeTenureMonths": 5
+  }
+}
