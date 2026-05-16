@@ -20,6 +20,15 @@ import type {
  * Constructing one with both is also a type error — they're mutually
  * exclusive paths through the harness.
  *
+ * Note on type-level enforcement: the discriminated union narrows
+ * "neither field set" to a type error at construction sites with
+ * literal objects. The "both fields set" case is NOT compile-rejected
+ * (TS resolves a both-set literal as FixtureFromPayload — the
+ * `identity?: never` only fires when the property is declared on a
+ * sibling branch). runFixtures defends in depth at runtime, rejecting
+ * both edges (neither-set + both-set) with an explicit error result
+ * instead of silently picking a branch.
+ *
  * `expected` is the canonical instance set the adapter should produce.
  * runFixtures diffs the actual against this and reports mismatches.
  */
@@ -65,15 +74,34 @@ export async function runFixtures(
   const results: FixtureResult[] = []
   for (const fixture of fixtures) {
     try {
-      // Defense-in-depth: discriminated union should make this impossible
-      // at compile time, but partner CI may call runFixtures with
-      // dynamically-loaded JSON fixtures that bypass the type-system check.
-      // Reject explicitly so we don't hand undefined into extract().
-      if (fixture.identity === undefined && fixture.rawPayload === undefined) {
+      // Defense-in-depth: the Fixture discriminated union narrows the
+      // "neither set" case to a type error, but the "both set" case
+      // sneaks past — TS resolves a literal with both `rawPayload`
+      // and `identity` to the FixtureFromPayload branch and the
+      // sibling `identity?: never` doesn't fire because never-typed
+      // properties only enforce when *the property is declared*.
+      // Same risk: partner CI passing dynamically-loaded JSON fixtures
+      // bypasses the type-system check entirely. Reject both edges
+      // here so the harness never silently picks one branch.
+      const hasPayload = fixture.rawPayload !== undefined
+      const hasIdentity = fixture.identity !== undefined
+      if (!hasPayload && !hasIdentity) {
         results.push({
           name: fixture.name,
           ok: false,
           error: `fixture must provide either 'rawPayload' or 'identity' — got neither`,
+        })
+        continue
+      }
+      if (hasPayload && hasIdentity) {
+        // Narrows to `never` because both branches' `?: never` make
+        // the intersection uninhabitable — cast back to a base shape
+        // so we can read the name for the error report.
+        const f = fixture as unknown as { name: string }
+        results.push({
+          name: f.name,
+          ok: false,
+          error: `fixture must provide exactly one of 'rawPayload' or 'identity' — got both`,
         })
         continue
       }
