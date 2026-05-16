@@ -13,10 +13,10 @@
     "telcoHandsetFinancingActive",
     "telcoHandsetFinancingDelinquent"
   ],
-  "requiredIdentityFields": ["ic", "fullName"],
+  "requiredIdentityFields": [],
   "implementation": {
     "type": "typescript",
     "entryPoint": "extract.mjs"
   },
-  "notes": "Reference adapter shipped with @finsys/adapter-toolkit. Pairs with the sibling fake-telco-api container; configure FAKE_TELCO_API_URL + FAKE_TELCO_API_KEY in the host environment."
+  "notes": "Reference adapter shipped with @finsys/adapter-toolkit. Pairs with the sibling fake-telco-api container; configure FAKE_TELCO_API_URL + FAKE_TELCO_API_KEY in the host environment. requiredIdentityFields is empty because this adapter only needs the core ApplicantIdentity trio (ihsId, ic, fullName) — declaring core fields here is a schema error since they may legitimately be absent for non-MY scope; the adapter's fetch() does its own defensive check and throws AdapterError('payload_invalid') if ic/fullName are empty."
 }

@@ -12,10 +12,10 @@
     "paymentsCustomerConcentrationTop5Pct",
     "paymentsActiveTenureMonths"
   ],
-  "requiredIdentityFields": ["ic", "fullName"],
+  "requiredIdentityFields": [],
   "implementation": {
     "type": "typescript",
     "entryPoint": "extract.mjs"
   },
-  "notes": "Reference adapter shipped with @finsys/adapter-toolkit. Pairs with the sibling fake-payments-api container; configure FAKE_PAYMENTS_API_URL + FAKE_PAYMENTS_API_KEY in the host environment. Uses the same IC identity key as fake-telco-v1 so a single applicant drives both adapters."
+  "notes": "Reference adapter shipped with @finsys/adapter-toolkit. Pairs with the sibling fake-payments-api container; configure FAKE_PAYMENTS_API_URL + FAKE_PAYMENTS_API_KEY in the host environment. Uses the same IC identity key as fake-telco-v1 so a single applicant drives both adapters. requiredIdentityFields is empty for the same reason as fake-telco-v1 — core fields aren't declarable; fetch() defensively rejects empty ic/fullName."
 }

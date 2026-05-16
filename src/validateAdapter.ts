@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from "node:fs"
+import { existsSync, readFileSync, realpathSync, statSync } from "node:fs"
 import { resolve, sep } from "node:path"
 import { pathToFileURL } from "node:url"
 import { createRequire } from "node:module"
@@ -87,6 +87,17 @@ export async function validateAdapter(dir: string): Promise<ValidateAdapterResul
       )
     } else if (!existsSync(entryPath)) {
       errors.push(`entryPoint file does not exist: ${entryPath}`)
+    } else if (!realpathStartsWith(entryPath, absDir)) {
+      // Symlink-safety: `resolve` + `startsWith` checks the LITERAL
+      // path; it does NOT follow symlinks. A partner could (intentionally
+      // or by accident) put a symlink inside the adapter dir pointing
+      // to /etc/passwd or another package's source; the literal-path
+      // check passes but the dynamic import follows the symlink. Use
+      // realpathSync to resolve any symlinks first, then re-check
+      // that the resolved path is still inside the adapter root.
+      errors.push(
+        `entryPoint resolves (via symlink or junction) outside the adapter dir: ${manifest.implementation.entryPoint}`,
+      )
     } else {
       try {
         const mod = (await import(pathToFileURL(entryPath).href)) as {
@@ -132,5 +143,20 @@ export async function validateAdapter(dir: string): Promise<ValidateAdapterResul
     errors,
     manifest,
     adapter,
+  }
+}
+
+/**
+ * True iff realpath(child) is contained within realpath(parent).
+ * Returns false on realpath errors (broken symlinks, EACCES) so the
+ * caller treats unresolvable paths as out-of-bounds.
+ */
+function realpathStartsWith(child: string, parent: string): boolean {
+  try {
+    const realChild = realpathSync(child)
+    const realParent = realpathSync(parent) + sep
+    return realChild.startsWith(realParent)
+  } catch {
+    return false
   }
 }
