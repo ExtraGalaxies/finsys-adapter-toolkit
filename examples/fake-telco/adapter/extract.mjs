@@ -65,7 +65,12 @@ const adapter = {
     // postpaid bill that goes late typically lands ~14-21 days late before
     // suspension). Real adapters with day-level visibility should use it.
     const lateDays = late * 15
-    const suspensions = Number(history.suspensions ?? unpaid > 0 ? 1 : 0)
+    // JS precedence: `??` binds tighter than `?:`, so without the inner
+    // parens this parses as `Number((history.suspensions ?? (unpaid > 0)) ? 1 : 0)`
+    // and silently squashes any provided non-zero suspensions count to 1.
+    // Parens force the intended fallback: use upstream value if set,
+    // otherwise infer 1 suspension when there are any unpaid bills.
+    const suspensions = Number(history.suspensions ?? (unpaid > 0 ? 1 : 0))
     const handsetActive = Boolean(raw.handsetFinancing?.active ?? false)
     const handsetDelinquent = Boolean(raw.handsetFinancing?.delinquent ?? false)
 
