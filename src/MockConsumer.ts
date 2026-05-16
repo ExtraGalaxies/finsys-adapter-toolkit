@@ -108,15 +108,35 @@ export class MockConsumer {
     if (!table) {
       throw new Error(`MockConsumer: unknown category '${input.category}'`)
     }
-    // Replace-on-rerun: drop prior rows for this (ihs, adapter) from
-    // OTHER runs. Same-run idempotency: drop matching (instanceKey)
-    // from this run too so re-invocations are clean.
+    // Replace-on-rerun semantics MUST match finsys-api's
+    // AdapterStorageService.persistExtraction (see
+    // src/services/adapterStorageService.ts:100-141 in finsys-api).
+    // Prod uses `Not(adapterRunId)` — it drops rows from OTHER runs of
+    // the same (ihs_id, adapter_id) tuple but PRESERVES rows already
+    // written by the current run. That matters if an adapter calls
+    // persistExtraction twice in one run (unusual but legal), or if
+    // tests stage multiple instance batches under the same runId.
+    //
+    // The older shape (drop ALL prior rows for (ihs, adapter)) gave
+    // partners green local tests + red prod surprises when the prod
+    // contract preserved current-run rows.
     const surviving = table.filter(
       (r) =>
-        !(r.ihsId === input.ihsId && r.adapterId === input.adapterId),
+        !(
+          r.ihsId === input.ihsId &&
+          r.adapterId === input.adapterId &&
+          r.adapterRunId !== input.adapterRunId
+        ),
     )
     table.length = 0
     table.push(...surviving)
+    // Empty-instances early-out (mirrors prod's behavior: the
+    // replace-on-rerun cleanup runs above, but we don't INSERT
+    // anything if instances is empty — caller should still
+    // recordAdapterRun externally so the audit trail captures it).
+    if (input.instances.length === 0) {
+      return
+    }
     for (const inst of input.instances) {
       table.push({
         id: this.nextId++,
