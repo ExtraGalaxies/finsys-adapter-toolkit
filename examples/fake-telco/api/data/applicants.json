@@ -1,0 +1,39 @@
+{
+  "_comment": "Reference data for the fake telco API. Three personas span the spectrum the demo shows: A=strong (>=24mo tenure, near-perfect on-time), B=mid (decent tenure, occasional lates), C=weak (short tenure, frequent lates). Keyed by IC number — matches how a real carrier would look up an account by national-ID on file.",
+  "850101015432": {
+    "persona": "A",
+    "displayName": "Aiman bin Hassan",
+    "subscriberSince": "2022-03-15",
+    "windowMonths": 24,
+    "billsIssued": 24,
+    "billsPaidOnTime": 24,
+    "billsPaidLate": 0,
+    "billsUnpaid": 0,
+    "averageMonthlyArpuMyr": 215.50,
+    "currentPlan": "postpaid-unlimited-180"
+  },
+  "920514075321": {
+    "persona": "B",
+    "displayName": "Bee Lin Tan",
+    "subscriberSince": "2023-09-10",
+    "windowMonths": 24,
+    "billsIssued": 18,
+    "billsPaidOnTime": 14,
+    "billsPaidLate": 4,
+    "billsUnpaid": 0,
+    "averageMonthlyArpuMyr": 89.00,
+    "currentPlan": "postpaid-flex-79"
+  },
+  "991230146789": {
+    "persona": "C",
+    "displayName": "Chong Wei Ng",
+    "subscriberSince": "2025-05-01",
+    "windowMonths": 24,
+    "billsIssued": 9,
+    "billsPaidOnTime": 3,
+    "billsPaidLate": 4,
+    "billsUnpaid": 2,
+    "averageMonthlyArpuMyr": 52.00,
+    "currentPlan": "postpaid-starter-49"
+  }
+}

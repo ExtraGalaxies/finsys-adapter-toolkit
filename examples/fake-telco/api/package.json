@@ -1,0 +1,14 @@
+{
+  "name": "fake-telco-api",
+  "version": "0.1.0",
+  "description": "Reference fake telco-carrier API for the FinSys Source Adapter Framework example. Serves canned per-applicant data so partners can prototype an adapter without standing up a real carrier integration.",
+  "private": true,
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
