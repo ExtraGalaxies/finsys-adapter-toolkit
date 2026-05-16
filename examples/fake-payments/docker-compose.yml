@@ -1,0 +1,35 @@
+# Reference compose for the fake-payments example. Brings up the fake
+# API alone — wire the adapter into your own FinSys / FinSim stack by
+# mounting ./adapter into the host's adapters directory and pointing
+# FAKE_PAYMENTS_API_URL at this service.
+#
+# Usage:
+#   cd examples/fake-payments
+#   docker compose up --build
+#   curl -H "x-api-key: demo-key" -X POST http://localhost:4200/v1/merchants/lookup \
+#        -H "content-type: application/json" \
+#        -d '{"ic":"850101015432","fullName":"Hassan Trading Sdn Bhd"}'
+
+services:
+  fake-payments-api:
+    build:
+      context: ./api
+    image: finsys-adapter-toolkit/fake-payments-api:0.1.0
+    container_name: fake-payments-api
+    environment:
+      PORT: "4200"
+      FAKE_PAYMENTS_API_KEY: "demo-key"
+    ports:
+      - "4200:4200"
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --tries=1
+        - --spider
+        - http://127.0.0.1:4200/health
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s

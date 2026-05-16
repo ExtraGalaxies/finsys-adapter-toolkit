@@ -1,13 +1,24 @@
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import { dirname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import express from "express"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const APPLICANTS = JSON.parse(
+
+// Built-in 3-persona data — what consumers get with zero config.
+// COHORT_DATA_FILE env var overrides with a larger keyed-by-IC dataset,
+// used by finsim's 100-applicant cohort replay (mounted volume).
+const DEFAULT_DATA = JSON.parse(
   readFileSync(resolve(__dirname, "data/applicants.json"), "utf8"),
 )
+const COHORT_FILE = process.env.COHORT_DATA_FILE
+let APPLICANTS = DEFAULT_DATA
+if (COHORT_FILE && existsSync(COHORT_FILE)) {
+  const cohort = JSON.parse(readFileSync(COHORT_FILE, "utf8"))
+  APPLICANTS = { ...DEFAULT_DATA, ...cohort }
+  console.log(`[fake-telco-api] loaded cohort overlay from ${COHORT_FILE} (${Object.keys(cohort).length} records, plus ${Object.keys(DEFAULT_DATA).length - 1} built-in personas)`)
+}
 
 const PORT = Number(process.env.PORT ?? 4100)
 const API_KEY = process.env.FAKE_TELCO_API_KEY ?? "demo-key"
