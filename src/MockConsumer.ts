@@ -120,6 +120,12 @@ export class MockConsumer {
     // The older shape (drop ALL prior rows for (ihs, adapter)) gave
     // partners green local tests + red prod surprises when the prod
     // contract preserved current-run rows.
+    //
+    // Transactional gap: prod wraps the delete + bulk-upsert in
+    // `getAppManager().transaction()` so a throw mid-flight rolls
+    // back. Mock is fully synchronous + has no throw paths between
+    // the delete + the push loop, so no transaction needed —
+    // intentional v0.1 simplification.
     const surviving = table.filter(
       (r) =>
         !(
@@ -137,7 +143,23 @@ export class MockConsumer {
     if (input.instances.length === 0) {
       return
     }
+    // Same-run dedupe on (ihsId, adapterId, instanceKey) — prod's
+    // bulk-upsert uses `ON DUPLICATE KEY UPDATE` on the matching
+    // unique index, so a same-run double-persist of the same
+    // instanceKey UPDATES the existing row instead of INSERTing
+    // a duplicate. Mock mirrors that: drop the previous row with
+    // the same (current-run, instanceKey) before pushing the new one.
     for (const inst of input.instances) {
+      const dupIdx = table.findIndex(
+        (r) =>
+          r.ihsId === input.ihsId &&
+          r.adapterId === input.adapterId &&
+          r.adapterRunId === input.adapterRunId &&
+          r.instanceKey === inst.instanceKey,
+      )
+      if (dupIdx >= 0) {
+        table.splice(dupIdx, 1)
+      }
       table.push({
         id: this.nextId++,
         ihsId: input.ihsId,
