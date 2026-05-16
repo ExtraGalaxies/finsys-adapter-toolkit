@@ -1,0 +1,28 @@
+# Reference compose for the fake-telco example. Brings up the fake API
+# alone — wire the adapter into your own FinSys / FinSim stack by
+# mounting `./adapter` into the host's adapters directory and pointing
+# FAKE_TELCO_API_URL at this service.
+#
+# Usage:
+#   cd examples/fake-telco
+#   docker compose up --build
+#   curl -H "x-api-key: demo-key" -X POST http://localhost:4100/v1/subscribers/lookup \
+#        -H "content-type: application/json" \
+#        -d '{"ic":"850101015432","fullName":"Aiman bin Hassan"}'
+
+services:
+  fake-telco-api:
+    build:
+      context: ./api
+    image: finsys-adapter-toolkit/fake-telco-api:0.1.0
+    container_name: fake-telco-api
+    environment:
+      PORT: "4100"
+      FAKE_TELCO_API_KEY: "demo-key"
+    ports:
+      - "4100:4100"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4100/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5

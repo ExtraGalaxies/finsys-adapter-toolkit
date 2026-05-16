@@ -1,0 +1,17 @@
+node_modules
+node_modules.nosync
+node_modules 2
+node_modules 3
+node_modules 4
+dist
+.DS_Store
+*.tgz
+.env
+.env.local
+coverage
+
+# dev-only registry/auth (Verdaccio iteration before public npm publish)
+.npmrc
+
+# library package — consumers should resolve their own lockfile
+package-lock.json

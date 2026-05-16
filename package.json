@@ -1,0 +1,50 @@
+{
+  "name": "@finsys/adapter-toolkit",
+  "version": "0.1.0",
+  "description": "Partner SDK for the FinSys Source Adapter Framework — manifest validator, fixture harness, mock consumer, and reference examples for adapter authors.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "finsys-adapter-toolkit": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "dev": "tsup --watch"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@finsys/core": "^2.7.0",
+    "ajv": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^2.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ExtraGalaxies/finsys-adapter-toolkit.git"
+  }
+}
