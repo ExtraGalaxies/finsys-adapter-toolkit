@@ -1,0 +1,10 @@
+{
+  "name": "fake-social-api",
+  "version": "0.1.0",
+  "description": "Reference fake social (business social-presence) API for the FinSys Source Adapter Framework example. Serves canned per-applicant social profiles so partners can prototype a social-media adapter without a real social-data integration.",
+  "private": true,
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": { "start": "node server.mjs" },
+  "dependencies": { "express": "^4.19.2" }
+}

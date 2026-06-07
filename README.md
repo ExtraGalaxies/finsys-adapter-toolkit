@@ -17,9 +17,13 @@ from zero to a working, validated adapter. Then:
   each category accepts (auto-generated from `@finsys/core`).
 - **[`examples/minimal-adapter-template/`](./examples/minimal-adapter-template/)**
   — the smallest copy-paste adapter that validates + passes a test.
-- **[`examples/fake-telco/`](./examples/fake-telco/)** /
-  **[`examples/fake-payments/`](./examples/fake-payments/)** — full reference
-  adapters with a sample source API.
+- **One full reference adapter per category** — each with a sample source API,
+  an offline mapping test, and a docker-compose: telco
+  ([`fake-telco/`](./examples/fake-telco/)), payment-network
+  ([`fake-payments/`](./examples/fake-payments/)), trade-credit
+  ([`fake-trade-credit/`](./examples/fake-trade-credit/)), social-media
+  ([`fake-social/`](./examples/fake-social/)). The same 3 applicant IC keys run
+  across all four, so one applicant carries every alternative-data layer.
 
 The contract types are re-exported from this package, so one import does it:
 `import type { SourceAdapter, AdapterManifest, AdapterExtraction, ApplicantIdentity } from "@finsys/adapter-toolkit"`.

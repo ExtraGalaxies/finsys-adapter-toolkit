@@ -1,0 +1,28 @@
+# Reference compose for the fake-social example. Brings up the fake API
+# alone — wire the adapter into your own FinSys / FinSim stack by mounting
+# `./adapter` into the host's adapters directory and pointing
+# FAKE_SOCIAL_API_URL at this service.
+#
+# Usage:
+#   cd examples/fake-social
+#   docker compose up --build
+#   curl -H "x-api-key: demo-key" -X POST http://localhost:4400/v1/profiles/lookup \
+#        -H "content-type: application/json" \
+#        -d '{"ic":"850101015432","fullName":"Aiman bin Hassan"}'
+
+services:
+  fake-social-api:
+    build:
+      context: ./api
+    image: finsys-adapter-toolkit/fake-social-api:0.1.0
+    container_name: fake-social-api
+    environment:
+      PORT: "4400"
+      FAKE_SOCIAL_API_KEY: "demo-key"
+    ports:
+      - "4400:4400"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4400/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5

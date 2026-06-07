@@ -1,0 +1,10 @@
+{
+  "name": "fake-trade-credit-api",
+  "version": "0.1.0",
+  "description": "Reference fake trade-credit (accounting AR/AP + P&L) API for the FinSys Source Adapter Framework example. Serves canned per-applicant accounting summaries so partners can prototype a trade-credit adapter without a real ERP integration.",
+  "private": true,
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": { "start": "node server.mjs" },
+  "dependencies": { "express": "^4.19.2" }
+}

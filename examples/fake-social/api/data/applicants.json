@@ -1,0 +1,30 @@
+{
+  "_comment": "Built-in 3-persona social/business-presence dataset, keyed by IC. A=strong, B=mid, C=weak. The same 3 ICs appear across the fake-telco, fake-payments, fake-trade-credit and fake-social examples so one applicant carries all four alternative-data layers. Override with a larger keyed-by-IC file via COHORT_DATA_FILE.",
+  "850101015432": {
+    "displayName": "Aiman bin Hassan",
+    "profile": { "accountAgeMonths": 84, "followers": 18500, "verified": true },
+    "engagement90d": { "engagementRate": 0.062, "avgInteractionsPerPost": 1147 },
+    "posting12m": { "activeMonths": 12 },
+    "reviews": { "avgRating": 4.6, "count": 312 },
+    "sentiment90d": { "negativeMentions": 4, "totalMentions": 220 },
+    "flags24m": { "count": 0 }
+  },
+  "920514075321": {
+    "displayName": "Tan Bee Lin",
+    "profile": { "accountAgeMonths": 36, "followers": 5200, "verified": true },
+    "engagement90d": { "engagementRate": 0.031, "avgInteractionsPerPost": 161 },
+    "posting12m": { "activeMonths": 9 },
+    "reviews": { "avgRating": 4.0, "count": 88 },
+    "sentiment90d": { "negativeMentions": 18, "totalMentions": 160 },
+    "flags24m": { "count": 1 }
+  },
+  "991230146789": {
+    "displayName": "Lim Chong Wei",
+    "profile": { "accountAgeMonths": 8, "followers": 640, "verified": false },
+    "engagement90d": { "engagementRate": 0.011, "avgInteractionsPerPost": 7 },
+    "posting12m": { "activeMonths": 4 },
+    "reviews": { "avgRating": 3.1, "count": 19 },
+    "sentiment90d": { "negativeMentions": 41, "totalMentions": 95 },
+    "flags24m": { "count": 3 }
+  }
+}
