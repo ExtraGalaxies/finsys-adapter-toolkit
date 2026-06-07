@@ -138,9 +138,12 @@ node my-adapter/test.mjs                               # uses runFixtures()
 - **`runFixtures(adapter, fixtures)`** — feeds raw payloads (or identities, to
   exercise `fetch()`) and diffs the result against your `expected` rows. See
   [`examples/minimal-adapter-template/`](../examples/minimal-adapter-template/)
-  for a runnable test, and [`examples/fake-telco/`](../examples/fake-telco/) /
-  [`examples/fake-payments/`](../examples/fake-payments/) for full reference
-  adapters (with a sample source API + docker-compose).
+  for a runnable test, and one full reference adapter per category — telco
+  ([`fake-telco/`](../examples/fake-telco/)), payment-network
+  ([`fake-payments/`](../examples/fake-payments/)), trade-credit
+  ([`fake-trade-credit/`](../examples/fake-trade-credit/)) and social-media
+  ([`fake-social/`](../examples/fake-social/)) — each with a sample source API +
+  docker-compose.
 - **`MockConsumer`** — an in-memory stand-in for FinHero's persistence, so you
   can round-trip fetch → extract → persist → read and assert the canonical rows
   exactly as the host would store them.

@@ -1,0 +1,22 @@
+{
+  "manifestVersion": 1,
+  "id": "fake-trade-credit-v1",
+  "displayName": "Fake Trade-Credit (reference)",
+  "category": "trade-credit",
+  "version": 1,
+  "produces": [
+    "arDaysSalesOutstanding",
+    "apDaysPayableOutstanding",
+    "arTotalOutstandingMyr",
+    "arCurrentRatio",
+    "arOverdue90PlusRatio",
+    "debtorConcentrationTop5Ratio",
+    "tradeReferenceDefaults12m",
+    "accountingRevenue12mMyr",
+    "grossMarginPct",
+    "cashConversionCycleDays"
+  ],
+  "requiredIdentityFields": [],
+  "implementation": { "type": "typescript", "entryPoint": "extract.mjs" },
+  "notes": "Reference adapter for the trade-credit category — a B2B accounting-data provider (AR/AP + P&L). Pairs with the sibling fake-trade-credit-api; configure FAKE_TRADE_CREDIT_API_URL + FAKE_TRADE_CREDIT_API_KEY in the host environment. requiredIdentityFields is empty because the adapter only needs the core ApplicantIdentity (ihsId, ic, fullName); the fetch() does its own defensive check."
+}
