@@ -1,0 +1,20 @@
+{
+  "manifestVersion": 1,
+  "id": "fake-social-v1",
+  "displayName": "Fake Social (reference)",
+  "category": "social-media",
+  "version": 1,
+  "produces": [
+    "socialAccountTenureMonths",
+    "socialFollowerCount",
+    "socialEngagementRate90d",
+    "socialPostingConsistency12m",
+    "socialVerifiedBusinessAccount",
+    "socialCustomerRatingAvg",
+    "socialNegativeSentimentRatio90d",
+    "socialAccountFlags24m"
+  ],
+  "requiredIdentityFields": [],
+  "implementation": { "type": "typescript", "entryPoint": "extract.mjs" },
+  "notes": "Reference adapter for the social-media category — a business social-presence data provider. Pairs with the sibling fake-social-api; configure FAKE_SOCIAL_API_URL + FAKE_SOCIAL_API_KEY in the host environment. requiredIdentityFields is empty because the adapter only needs the core ApplicantIdentity (ihsId, ic, fullName); the fetch() does its own defensive check."
+}

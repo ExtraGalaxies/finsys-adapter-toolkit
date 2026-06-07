@@ -1,0 +1,42 @@
+{
+  "_comment": "Reference data for the fake trade-credit API. Models an accounting system's AR/AP + P&L export (the kind of summary AutoCount-/SQL-Account-class software produces) keyed by IC — matches how a B2B trade-credit data provider would look an account up by national ID on file. Three personas: A=strong (clean receivables, low DSO, healthy margin), B=mid (some 90+ overdue, slower collections), C=weak (heavy overdue, trade-reference defaults, thin margin). NO real company or product names. The adapter maps this raw shape to the canonical trade-credit fields.",
+  "850101015432": {
+    "persona": "A",
+    "displayName": "Aiman bin Hassan",
+    "accountsReceivable": {
+      "totalMyr": 250000,
+      "aging": { "current": 232000, "d1_30": 14000, "d31_60": 3000, "d61_90": 1000, "d90plus": 0 },
+      "top5DebtorShareRatio": 0.31
+    },
+    "accountsPayable": { "totalMyr": 120000, "avgDaysOutstanding": 38 },
+    "incomeStatement12m": { "revenueMyr": 2400000, "cogsMyr": 1320000 },
+    "tradeReferences": { "defaults12m": 0 },
+    "metrics": { "daysSalesOutstanding": 28, "cashConversionCycleDays": 11 }
+  },
+  "920514075321": {
+    "persona": "B",
+    "displayName": "Bee Lin Tan",
+    "accountsReceivable": {
+      "totalMyr": 180000,
+      "aging": { "current": 110000, "d1_30": 35000, "d31_60": 18000, "d61_90": 8000, "d90plus": 9000 },
+      "top5DebtorShareRatio": 0.52
+    },
+    "accountsPayable": { "totalMyr": 140000, "avgDaysOutstanding": 61 },
+    "incomeStatement12m": { "revenueMyr": 1200000, "cogsMyr": 936000 },
+    "tradeReferences": { "defaults12m": 1 },
+    "metrics": { "daysSalesOutstanding": 64, "cashConversionCycleDays": 58 }
+  },
+  "991230146789": {
+    "persona": "C",
+    "displayName": "Chong Wei Ng",
+    "accountsReceivable": {
+      "totalMyr": 90000,
+      "aging": { "current": 33000, "d1_30": 12000, "d31_60": 11000, "d61_90": 10000, "d90plus": 24000 },
+      "top5DebtorShareRatio": 0.71
+    },
+    "accountsPayable": { "totalMyr": 130000, "avgDaysOutstanding": 95 },
+    "incomeStatement12m": { "revenueMyr": 600000, "cogsMyr": 540000 },
+    "tradeReferences": { "defaults12m": 4 },
+    "metrics": { "daysSalesOutstanding": 128, "cashConversionCycleDays": 142 }
+  }
+}

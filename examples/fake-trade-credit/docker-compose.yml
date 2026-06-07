@@ -1,0 +1,28 @@
+# Reference compose for the fake-trade-credit example. Brings up the fake API
+# alone — wire the adapter into your own FinSys / FinSim stack by mounting
+# `./adapter` into the host's adapters directory and pointing
+# FAKE_TRADE_CREDIT_API_URL at this service.
+#
+# Usage:
+#   cd examples/fake-trade-credit
+#   docker compose up --build
+#   curl -H "x-api-key: demo-key" -X POST http://localhost:4300/v1/accounts/lookup \
+#        -H "content-type: application/json" \
+#        -d '{"ic":"850101015432","fullName":"Aiman bin Hassan"}'
+
+services:
+  fake-trade-credit-api:
+    build:
+      context: ./api
+    image: finsys-adapter-toolkit/fake-trade-credit-api:0.1.0
+    container_name: fake-trade-credit-api
+    environment:
+      PORT: "4300"
+      FAKE_TRADE_CREDIT_API_KEY: "demo-key"
+    ports:
+      - "4300:4300"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4300/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
