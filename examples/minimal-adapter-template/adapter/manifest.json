@@ -1,0 +1,10 @@
+{
+  "manifestVersion": 1,
+  "id": "minimal-telco-v1",
+  "displayName": "Minimal adapter template",
+  "category": "telco-carrier",
+  "version": 1,
+  "produces": ["telcoOnTimePaymentRatio24m", "telcoTenureMonths"],
+  "requiredIdentityFields": [],
+  "implementation": { "type": "typescript", "entryPoint": "extract.mjs" }
+}
