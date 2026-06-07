@@ -7,6 +7,23 @@ stack.
 > Status: **v0.1.0 — minimum viable surface.** Expanding as partner-side
 > feedback sharpens what authors actually need.
 
+## New here? Start with the integration guide
+
+If you're a company integrating your data into FinHero as a data provider,
+read the **[integration guide](./docs/integration-guide.md)** — it walks you
+from zero to a working, validated adapter. Then:
+
+- **[Canonical fields by category](./docs/canonical-fields.md)** — every field
+  each category accepts (auto-generated from `@finsys/core`).
+- **[`examples/minimal-adapter-template/`](./examples/minimal-adapter-template/)**
+  — the smallest copy-paste adapter that validates + passes a test.
+- **[`examples/fake-telco/`](./examples/fake-telco/)** /
+  **[`examples/fake-payments/`](./examples/fake-payments/)** — full reference
+  adapters with a sample source API.
+
+The contract types are re-exported from this package, so one import does it:
+`import type { SourceAdapter, AdapterManifest, AdapterExtraction, ApplicantIdentity } from "@finsys/adapter-toolkit"`.
+
 ## What's in the box
 
 - **`validateAdapter(dir)`** — loads `manifest.json`, validates against
