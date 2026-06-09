@@ -1,6 +1,6 @@
 {
   "name": "@finsys/adapter-toolkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Partner SDK for the FinSys Source Adapter Framework — manifest validator, fixture harness, mock consumer, and reference examples for adapter authors.",
   "license": "Apache-2.0",
   "type": "module",
