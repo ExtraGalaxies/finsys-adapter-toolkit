@@ -10,12 +10,6 @@ dist
 .env.local
 coverage
 
-# dev-only registry/auth (Verdaccio iteration before public npm publish).
-# NOTE: a local .npmrc pointing @finsys at Verdaccio will poison
-# package-lock.json with localhost URLs on the next `npm install` —
-# delete it (or the lock diff) before committing.
-.npmrc
-
 # package-lock.json IS committed (SYS-2556): npm ci in CI needs it, and
 # a library repo's lockfile never affects consumers — npm ignores
 # dependency lockfiles on install. It must resolve from public npm only.
