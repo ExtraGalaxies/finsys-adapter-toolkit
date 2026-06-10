@@ -9,14 +9,4 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
-      - run: npm publish --access public
+    uses: ExtraGalaxies/finsys-core/.github/workflows/npm-package-publish.yml@55120a74b073419c03c4427b7d7098bbfaec2442
