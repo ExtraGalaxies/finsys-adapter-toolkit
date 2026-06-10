@@ -7,6 +7,6 @@ on:
 
 jobs:
   ci:
-    uses: ExtraGalaxies/finsys-core/.github/workflows/npm-package-ci.yml@55120a74b073419c03c4427b7d7098bbfaec2442
+    uses: ExtraGalaxies/finsys-core/.github/workflows/npm-package-ci.yml@5a73948b96e6b5f5544dbe4192382a8bd3f6b32e
     with:
-      node-versions: '[20, 22, 24]'
+      node-versions: '[24]'
