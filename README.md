@@ -7,6 +7,11 @@ stack.
 > Status: **v0.1.0 — minimum viable surface.** Expanding as partner-side
 > feedback sharpens what authors actually need.
 
+## Prerequisites
+
+- **Node 24.16.0** (see [`.nvmrc`](./.nvmrc)) — run `nvm use` to match it.
+- **npm ≥ 12.0.1** — after `nvm use`, run `npm install -g npm@12.0.1`.
+
 ## New here? Start with the integration guide
 
 If you're a company integrating your data into FinHero as a data provider,
