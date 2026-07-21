@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinHero Integration Portal — Source Adapter Registry</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #070b19;
+      --bg-card: rgba(13, 20, 43, 0.6);
+      --bg-card-hover: rgba(18, 27, 59, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-color-focus: rgba(0, 229, 255, 0.5);
+      
+      --text-main: #e2e8f0;
+      --text-muted: #8892b0;
+      --text-highlight: #00e5ff;
+      --text-accent: #00ffaa;
+      
+      --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 229, 255, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 45%),
+        linear-gradient(180deg, #070b19 0%, #03060f 100%);
+      background-attachment: fixed;
+      padding-bottom: 80px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header styling */
+    header {
+      padding: 40px 0 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(7, 11, 25, 0.8);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--text-highlight), var(--text-accent));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #070b19;
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.25);
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-text span {
+      background: linear-gradient(135deg, var(--text-highlight), var(--text-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 80px 0 60px 0;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 16px;
+      background: rgba(0, 229, 255, 0.08);
+      border: 1px solid rgba(0, 229, 255, 0.15);
+      border-radius: 50px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-highlight);
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 48px;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, var(--text-highlight), var(--text-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lead-text {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin: 40px 0 60px 0;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent-gradient, linear-gradient(to bottom, var(--text-highlight), var(--text-accent)));
+      opacity: 0.8;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-color-focus-override, var(--border-color-focus));
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      background: var(--bg-card-hover);
+    }
+
+    .card-meta {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--meta-color, var(--text-highlight));
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-meta span.category-badge {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      text-transform: none;
+      color: var(--text-muted);
+    }
+
+    .card h2 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 24px;
+      flex-grow: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--meta-color, var(--text-highlight));
+      transition: gap 0.2s ease;
+    }
+
+    .card:hover .card-footer {
+      gap: 12px;
+    }
+
+    /* Specific Card Accents */
+    .card-telco {
+      --accent-gradient: linear-gradient(to bottom, #00e5ff, #00ffaa);
+      --meta-color: #00e5ff;
+      --border-color-focus-override: rgba(0, 229, 255, 0.4);
+    }
+
+    .card-payments {
+      --accent-gradient: linear-gradient(to bottom, #c084fc, #818cf8);
+      --meta-color: #c084fc;
+      --border-color-focus-override: rgba(168, 85, 247, 0.4);
+    }
+
+    .card-trade {
+      --accent-gradient: linear-gradient(to bottom, #10b981, #06b6d4);
+      --meta-color: #10b981;
+      --border-color-focus-override: rgba(16, 185, 129, 0.4);
+    }
+
+    /* Command section */
+    .terminal-section {
+      background: #040712;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 20px;
+    }
+
+    .terminal-header {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .terminal-header svg {
+      color: var(--text-highlight);
+    }
+
+    .terminal-desc {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    .terminal-code {
+      background: #010206;
+      border-radius: 8px;
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: #9cdcfe;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .terminal-line {
+      margin-bottom: 8px;
+    }
+    .terminal-line:last-child {
+      margin-bottom: 0;
+    }
+    .terminal-prompt {
+      color: #00e5ff;
+      margin-right: 12px;
+      user-select: none;
+    }
+    .terminal-cmd {
+      color: #fff;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 60px;
+    }
+
+    footer a {
+      color: var(--text-highlight);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="container header-content">
+      <div class="logo-container">
+        <div class="logo-icon">FH</div>
+        <div class="logo-text">FinHero <span>Integration Hub</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Hero / Intro -->
+    <section class="hero">
+      <span class="badge">ALTERNATIVE DATA SCHEMA REGISTRY</span>
+      <h1>FinHero Source <span>Adapter Playbooks</span></h1>
+      <p class="lead-text">
+        Interactive onboarding dashboards designed for data-provider engineering and product management teams. 
+        Select your integration category below to view specifications, live response mapping calculators, and boilerplate configurations.
+      </p>
+    </section>
+
+    <!-- Cards Grid -->
+    <div class="cards-grid">
+      <!-- Telco Card -->
+      <a href="./telco-integration-guide.html" class="card card-telco">
+        <div>
+          <div class="card-meta">
+            <span>Adapter: Telco</span>
+            <span class="category-badge">telco-carrier</span>
+          </div>
+          <h2>Telco Carrier Playbook</h2>
+          <p>Map subscriber account age, monthly ARPU, device EMIs, and historical billing/suspension event sequences into canonical credit scores.</p>
+        </div>
+        <div class="card-footer">
+          <span>Launch Playbook</span> ➔
+        </div>
+      </a>
+
+      <!-- Payments Card -->
+      <a href="./payments-integration-guide.html" class="card card-payments">
+        <div>
+          <div class="card-meta">
+            <span>Adapter: Payments</span>
+            <span class="category-badge">payment-network</span>
+          </div>
+          <h2>Payments Network Playbook</h2>
+          <p>Translate gateway processing settlements, transaction volumes (T3/T12), ARPU stability indexes, and chargeback dispute metrics.</p>
+        </div>
+        <div class="card-footer">
+          <span>Launch Playbook</span> ➔
+        </div>
+      </a>
+
+      <!-- Trade Credit Card -->
+      <a href="./trade-credit-integration-guide.html" class="card card-trade">
+        <div>
+          <div class="card-meta">
+            <span>Adapter: Trade Credit</span>
+            <span class="category-badge">trade-credit</span>
+          </div>
+          <h2>Trade Credit Playbook</h2>
+          <p>Extract general ledger AR/AP balances, DSO/DPO intervals, debtor concentration indexes, supplier default events, and cash cycles.</p>
+        </div>
+        <div class="card-footer">
+          <span>Launch Playbook</span> ➔
+        </div>
+      </a>
+    </div>
+
+    <!-- Quickstart commands -->
+    <div class="terminal-section">
+      <div class="terminal-header">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h10"></path></svg>
+        Local Developer Quickstart
+      </div>
+      <div class="terminal-desc">
+        Install the integration harness and schema linter tools to perform offline validation checks locally:
+      </div>
+      <pre class="terminal-code"><div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-cmd">npm install --save-dev @finsys/adapter-toolkit</span></div><div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-cmd">npx finsys-adapter-toolkit validate ./your-adapter-dir</span></div></pre>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 FinHero Inc. Built for Alternative Data Integrators. View the general <a href="./integration-guide.md">Onboarding Guide</a>.</p>
+  </footer>
+
+</body>
+</html>
