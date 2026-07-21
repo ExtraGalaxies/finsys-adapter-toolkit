@@ -258,6 +258,19 @@
       --border-color-focus-override: rgba(236, 72, 153, 0.4);
     }
 
+    .card-placeholder {
+      border: 1px dashed rgba(0, 229, 255, 0.35);
+      background: rgba(13, 20, 43, 0.25);
+      --accent-gradient: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      --meta-color: var(--text-muted);
+      opacity: 0.85;
+    }
+    .card-placeholder:hover {
+      border-style: solid;
+      border-color: var(--text-highlight);
+      opacity: 1;
+    }
+
     /* Command section */
     .terminal-section {
       background: #040712;
@@ -415,6 +428,21 @@
         </div>
         <div class="card-footer">
           <span>Launch Playbook</span> ➔
+        </div>
+      </a>
+
+      <!-- Placeholder Card -->
+      <a href="mailto:partners@finhero.example?subject=Custom%20Adapter%20Integration" class="card card-placeholder">
+        <div>
+          <div class="card-meta">
+            <span>Ecosystem Expansion</span>
+            <span class="category-badge">custom-integration</span>
+          </div>
+          <h2>Your Adapter Next?</h2>
+          <p>Have proprietary accounting, transaction processing, or consumer behavior databases? Build your custom adapter module and reach hundreds of FinHero lenders.</p>
+        </div>
+        <div class="card-footer">
+          <span>Contact Partner Support</span> ➔
         </div>
       </a>
     </div>
