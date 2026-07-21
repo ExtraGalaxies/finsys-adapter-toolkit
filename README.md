@@ -16,7 +16,16 @@ stack.
 
 If you're a company integrating your data into FinHero as a data provider,
 read the **[integration guide](./docs/integration-guide.md)** — it walks you
-from zero to a working, validated adapter. Then:
+from zero to a working, validated adapter.
+
+### 🎨 Interactive Playbooks
+For a visually-guided onboarding process, open these interactive playbooks containing live API response mapping calculators:
+- 📱 **[Telco Carrier Playbook](./docs/telco-integration-guide.html)**
+- 💳 **[Payments Network Playbook](./docs/payments-integration-guide.html)**
+- 📈 **[Trade Credit Ledger Playbook](./docs/trade-credit-integration-guide.html)**
+- 💬 **[Social Media Playbook](./docs/social-media-integration-guide.html)**
+
+Then:
 
 - **[Canonical fields by category](./docs/canonical-fields.md)** — every field
   each category accepts (auto-generated from `@finsys/core`).
