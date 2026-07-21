@@ -19,11 +19,12 @@ read the **[integration guide](./docs/integration-guide.md)** — it walks you
 from zero to a working, validated adapter.
 
 ### 🎨 Interactive Playbooks
-For a visually-guided onboarding process, open these interactive playbooks containing live API response mapping calculators:
-- 📱 **[Telco Carrier Playbook](./docs/telco-integration-guide.html)**
-- 💳 **[Payments Network Playbook](./docs/payments-integration-guide.html)**
-- 📈 **[Trade Credit Ledger Playbook](./docs/trade-credit-integration-guide.html)**
-- 💬 **[Social Media Playbook](./docs/social-media-integration-guide.html)**
+For a visually-guided onboarding process, access the live interactive playbooks:
+- 🌐 **[Ecosystem Integration Portal](https://extragalaxies.github.io/finsys-adapter-toolkit/)**
+- 📱 **[Telco Carrier Playbook](https://extragalaxies.github.io/finsys-adapter-toolkit/telco-integration-guide.html)**
+- 💳 **[Payments Network Playbook](https://extragalaxies.github.io/finsys-adapter-toolkit/payments-integration-guide.html)**
+- 📈 **[Trade Credit Ledger Playbook](https://extragalaxies.github.io/finsys-adapter-toolkit/trade-credit-integration-guide.html)**
+- 💬 **[Social Media Playbook](https://extragalaxies.github.io/finsys-adapter-toolkit/social-media-integration-guide.html)**
 
 Then:
 
