@@ -1386,7 +1386,7 @@
         <span class="code-property">telcoOnTimePaymentRatio24m</span>: onTimeRatio,
         <span class="code-property">telcoLateDays24m</span>: lateDays,
         <span class="code-property">telcoSuspensionsCount24m</span>: suspensions,
-        <span class="code-property">telcoArpuMyr</span>: arpu,
+        <span class="code-property">telcoArpuMyr</span>: Number(raw.averageMonthlyArpuMyr ?? <span class="code-number">0</span>),
         <span class="code-property">telcoHandsetFinancingActive</span>: handsetActive,
         <span class="code-property">telcoHandsetFinancingDelinquent</span>: handsetDelinquent
       }
