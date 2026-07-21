@@ -23,6 +23,7 @@ For a visually-guided onboarding process, open these interactive playbooks conta
 - 📱 **[Telco Carrier Playbook](./docs/telco-integration-guide.html)**
 - 💳 **[Payments Network Playbook](./docs/payments-integration-guide.html)**
 - 📈 **[Trade Credit Ledger Playbook](./docs/trade-credit-integration-guide.html)**
+- 💬 **[Social Media Playbook](./docs/social-media-integration-guide.html)**
 
 Then:
 
