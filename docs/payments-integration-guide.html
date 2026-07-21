@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinHero Payments Integration Blueprint</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Theme colors (Sleek dark mode theme with payments theme accent - purple/indigo) */
+      --bg-dark: #070b19;
+      --bg-card: rgba(13, 20, 43, 0.6);
+      --bg-card-hover: rgba(18, 27, 59, 0.85);
+      --border-color: rgba(168, 85, 247, 0.2);
+      --border-color-focus: rgba(168, 85, 247, 0.6);
+      
+      --text-main: #e2e8f0;
+      --text-muted: #8892b0;
+      --text-highlight: #c084fc;
+      --text-accent: #818cf8;
+      --text-warning: #fb7185;
+      --text-error: #f43f5e;
+      
+      --glow-purple: rgba(168, 85, 247, 0.25);
+      --glow-indigo: rgba(99, 102, 241, 0.2);
+      
+      --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(168, 85, 247, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 45%),
+        linear-gradient(180deg, #070b19 0%, #03060f 100%);
+      background-attachment: fixed;
+      padding-bottom: 80px;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(168, 85, 247, 0.2);
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(168, 85, 247, 0.4);
+    }
+
+    /* Container & Layout */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* Header styling */
+    header {
+      padding: 40px 0 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 11, 25, 0.8);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--text-highlight), var(--text-accent));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #070b19;
+      box-shadow: 0 0 15px var(--glow-purple);
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-text span {
+      background: linear-gradient(135deg, var(--text-highlight), var(--text-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 24px;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 6px 0;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--text-highlight);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--text-highlight);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after, nav a.active::after {
+      width: 100%;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 80px 0 60px 0;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 16px;
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid var(--border-color);
+      border-radius: 50px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-highlight);
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.05);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 48px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, var(--text-highlight), var(--text-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(168, 85, 247, 0.1);
+    }
+
+    .lead-text {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 40px auto;
+    }
+
+    /* Info Cards Grid */
+    .blueprint-targets {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+
+    .target-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .target-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--text-highlight), var(--text-accent));
+      opacity: 0.7;
+    }
+
+    .target-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-color-focus);
+      box-shadow: 0 10px 30px rgba(168, 85, 247, 0.08);
+      background: var(--bg-card-hover);
+    }
+
+    .target-card h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .target-card h3 svg {
+      color: var(--text-highlight);
+    }
+
+    .target-card p {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    .target-card ul {
+      list-style-type: none;
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .target-card li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .target-card li::before {
+      content: '💳';
+      font-size: 12px;
+    }
+
+    /* Sections Shared Styling */
+    section {
+      padding: 60px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-highlight);
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 16px;
+      margin-bottom: 40px;
+      max-width: 800px;
+    }
+
+    /* Diagram Canvas */
+    .flow-diagram-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .diagram-svg-wrapper {
+      width: 100%;
+      max-width: 1000px;
+      overflow-x: auto;
+    }
+
+    .diagram-svg {
+      min-width: 850px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* SVG Animation effects */
+    .animate-pulse-glow {
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { filter: drop-shadow(0 0 2px var(--text-highlight)); }
+      50% { filter: drop-shadow(0 0 12px var(--text-highlight)); }
+    }
+
+    .flow-line {
+      stroke-dasharray: 8, 8;
+      animation: flow-dash 30s linear infinite;
+    }
+
+    @keyframes flow-dash {
+      to { stroke-dashoffset: -1000; }
+    }
+
+    .step-labels {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 24px;
+    }
+
+    .step-label-card {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .step-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-highlight);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .step-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .step-text {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    /* Schema Table styling */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      margin-bottom: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 15px;
+    }
+
+    th {
+      background: rgba(168, 85, 247, 0.05);
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--text-highlight);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .field-name {
+      font-family: var(--font-mono);
+      color: var(--text-accent);
+      font-weight: 500;
+    }
+
+    .field-type {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: var(--text-muted);
+      display: inline-block;
+    }
+
+    .field-unit {
+      color: var(--text-warning);
+      font-size: 13px;
+      font-family: var(--font-mono);
+    }
+
+    /* Live Interactive Sandbox */
+    .sandbox-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 992px) {
+      .sandbox-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sandbox-controls {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sandbox-header {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 12px;
+    }
+
+    .persona-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .persona-btn-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .btn-persona {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-persona:hover {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-main);
+    }
+
+    .btn-persona.active {
+      background: rgba(168, 85, 247, 0.1);
+      border-color: var(--text-highlight);
+      color: var(--text-highlight);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.1);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group input[type="date"],
+    .form-group select {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      transition: border-color 0.2s ease;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--border-color-focus);
+      outline: none;
+    }
+
+    .sandbox-payload-visualizer {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: stretch;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .sandbox-payload-visualizer {
+        grid-template-columns: 1fr;
+      }
+      .visualizer-connector {
+        transform: rotate(90deg);
+        padding: 10px 0;
+      }
+    }
+
+    .payload-card {
+      background: #040712;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 480px;
+    }
+
+    .payload-card-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 12px 18px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .payload-card-header span.badge-header {
+      background: rgba(129, 140, 248, 0.08);
+      border: 1px solid rgba(129, 140, 248, 0.2);
+      color: var(--text-accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    .payload-card-header span.badge-header.blue {
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      color: var(--text-highlight);
+    }
+
+    .payload-code {
+      flex: 1;
+      padding: 16px;
+      overflow: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: #02040b;
+      margin: 0;
+      color: #c084fc;
+    }
+
+    .visualizer-connector {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .arrow-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-highlight);
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+
+    .mapping-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Tabs & Code Snippets */
+    .tabs-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 30px;
+    }
+
+    .tabs-header {
+      display: flex;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0 10px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 16px 24px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      color: var(--text-highlight);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--text-highlight);
+    }
+
+    .tab-content {
+      display: none;
+      position: relative;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .code-wrapper {
+      margin: 0;
+      position: relative;
+    }
+
+    .code-block {
+      background: #03050c;
+      padding: 24px;
+      overflow: auto;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.5;
+      color: #9cdcfe;
+      border-radius: 0 0 16px 16px;
+      margin: 0;
+      max-height: 550px;
+    }
+
+    /* Syntax Highlighting */
+    .code-comment { color: #6a9955; font-style: italic; }
+    .code-keyword { color: #569cd6; font-weight: bold; }
+    .code-string { color: #ce9178; }
+    .code-number { color: #b5cea8; }
+    .code-function { color: #dcdcaa; }
+    .code-property { color: #9cdcfe; }
+
+    .btn-copy {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .btn-copy:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Terminal commands styles */
+    .terminal-card {
+      background: #02040a;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .terminal-header {
+      background: #0d0f17;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .terminal-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .terminal-body {
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: #fff;
+      position: relative;
+    }
+
+    .terminal-line {
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .terminal-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .terminal-prompt {
+      color: var(--text-highlight);
+      margin-right: 12px;
+      user-select: none;
+    }
+
+    .terminal-cmd {
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .terminal-output {
+      color: var(--text-muted);
+      width: 100%;
+      margin-top: 4px;
+      padding-left: 20px;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    footer a {
+      color: var(--text-highlight);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Alerts */
+    .note-box {
+      background: rgba(168, 85, 247, 0.03);
+      border-left: 4px solid var(--text-highlight);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 24px 0;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .note-box-icon {
+      font-size: 20px;
+      margin-top: -2px;
+    }
+
+    .note-box-content h4 {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .note-box-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* Smooth scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="container header-content">
+      <div class="logo-container">
+        <div class="logo-icon">FH</div>
+        <div class="logo-text">FinHero <span>Adapter: Payments</span></div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#overview" class="active">Overview</a></li>
+          <li><a href="#pipeline">Data Pipeline</a></li>
+          <li><a href="#schema">Canonical Schema</a></li>
+          <li><a href="#sandbox">Payload Sandbox</a></li>
+          <li><a href="#source-code">Implementation</a></li>
+          <li><a href="#testing">Testing Commands</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Hero / Intro -->
+    <section id="overview" class="hero">
+      <span class="badge">PAYMENT-NETWORK INTEGRATION PLAYBOOK</span>
+      <h1>Designing APIs for Alternative <span>Credit Scoring</span></h1>
+      <p class="lead-text">
+        As a merchant-side payment processor, POS network, or checkout gateway, your transaction flow signals provide 
+        verifiable revenue indicators. This blueprint helps your team design lookup endpoints and write FinHero-compliant 
+        source adapters for merchant transactional scoring.
+      </p>
+
+      <div class="blueprint-targets">
+        <!-- Target Product Managers -->
+        <div class="target-card">
+          <h3>
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Product Manager Focus
+          </h3>
+          <p>Package transaction volume stability, dispute rates, and tenure metrics for business credit underwriting.</p>
+          <ul>
+            <li><strong>Merchant ID</strong>: Query using business registration keys or director IC numbers.</li>
+            <li><strong>Underwriting signals</strong>: Expose monthly transaction averages and dispute rates.</li>
+            <li><strong>Value Proposition</strong>: Help SME merchants secure faster capital based on payment history.</li>
+          </ul>
+        </div>
+        
+        <!-- Target Engineers -->
+        <div class="target-card">
+          <h3>
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"></path></svg>
+            API Engineering Focus
+          </h3>
+          <p>Create the lightweight adapter mapping payment gateway responses into FinHero canonical types.</p>
+          <ul>
+            <li><strong>Fetch Method</strong>: Query merchant metrics from internal billing servers securely.</li>
+            <li><strong>Extract Method</strong>: Local deterministic mapper for monthly volume ratios.</li>
+            <li><strong>Compliance</strong>: Ensure output matches the `payment-network` schema.</li>
+          </ul>
+        </div>
+
+        <!-- Target QA / DevOps -->
+        <div class="target-card">
+          <h3>
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Integration & QA Focus
+          </h3>
+          <p>Ensure correct payload mapping using local validation manifests and offline suite fixtures.</p>
+          <ul>
+            <li><strong>Compliance</strong>: Validate fields against core JSON-schema files.</li>
+            <li><strong>Local Mocking</strong>: Run local compose suites mapping mock merchant credentials.</li>
+            <li><strong>Continuous Integration</strong>: Hook validations into standard git commit workflows.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="note-box">
+        <span class="note-box-icon">💳</span>
+        <div class="note-box-content">
+          <h4>Understanding the "payment-network" Category</h4>
+          <p>
+            This schema measures POS or gateway settlement flows in Malaysian Ringgit (MYR). It establishes the actual 
+            merchant inbound capital velocity over 3-month and 12-month periods to assess loan affordability.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pipeline Visuals / Diagrams -->
+    <section id="pipeline">
+      <div class="section-title">
+        <div class="section-title-icon">📊</div>
+        <h2>Data Extraction Pipeline</h2>
+      </div>
+      <p class="section-desc">
+        How merchant identification maps to transaction velocity metrics. The process runs locally within the 
+        secure FinHero adapter orchestration layer.
+      </p>
+
+      <div class="flow-diagram-container">
+        <div class="diagram-svg-wrapper">
+          <svg class="diagram-svg" viewBox="0 0 900 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background grids/connectors -->
+            <path class="flow-line" d="M120 120 H 780" stroke="rgba(168, 85, 247, 0.15)" stroke-width="3" />
+            <path class="flow-line" d="M120 120 H 780" stroke="url(#gradient-line)" stroke-width="3" />
+            
+            <!-- Defs -->
+            <defs>
+              <linearGradient id="gradient-line" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#c084fc" stop-opacity="0.1" />
+                <stop offset="50%" stop-color="#818cf8" stop-opacity="0.8" />
+                <stop offset="100%" stop-color="#c084fc" stop-opacity="0.1" />
+              </linearGradient>
+              <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                <stop offset="0%" stop-color="#c084fc" />
+              </filter>
+            </defs>
+
+            <!-- Node 1: Applicant Input -->
+            <rect x="20" y="70" width="160" height="100" rx="12" fill="#0c142e" stroke="var(--border-color)" stroke-width="2" class="animate-pulse-glow" />
+            <text x="100" y="110" fill="var(--text-main)" font-family="var(--font-display)" font-size="14" font-weight="600" text-anchor="middle">1. FinHero Host</text>
+            <text x="100" y="130" fill="var(--text-muted)" font-family="var(--font-body)" font-size="11" text-anchor="middle">Receives SME Request</text>
+            <text x="100" y="150" fill="var(--text-highlight)" font-family="var(--font-mono)" font-size="10" text-anchor="middle">Identity: { IC, Name }</text>
+
+            <!-- Node 2: Adapter Fetch -->
+            <rect x="240" y="70" width="170" height="100" rx="12" fill="#0c142e" stroke="var(--border-color)" stroke-width="2" />
+            <text x="325" y="110" fill="var(--text-main)" font-family="var(--font-display)" font-size="14" font-weight="600" text-anchor="middle">2. Adapter: fetch()</text>
+            <text x="325" y="130" fill="var(--text-muted)" font-family="var(--font-body)" font-size="11" text-anchor="middle">Query Gateway API</text>
+            <text x="325" y="150" fill="var(--text-accent)" font-family="var(--font-mono)" font-size="10" text-anchor="middle">POST /merchants/lookup</text>
+
+            <!-- Node 3: Raw Payload -->
+            <rect x="480" y="70" width="170" height="100" rx="12" fill="#0c142e" stroke="var(--border-color)" stroke-width="2" />
+            <text x="565" y="110" fill="var(--text-main)" font-family="var(--font-display)" font-size="14" font-weight="600" text-anchor="middle">3. Adapter: extract()</text>
+            <text x="565" y="130" fill="var(--text-muted)" font-family="var(--font-body)" font-size="11" text-anchor="middle">Translate volume arrays</text>
+            <text x="565" y="150" fill="var(--text-warning)" font-family="var(--font-mono)" font-size="10" text-anchor="middle">Format metrics values</text>
+
+            <!-- Node 4: Canonical Output -->
+            <rect x="710" y="70" width="170" height="100" rx="12" fill="#0c142e" stroke="var(--border-color)" stroke-width="2" />
+            <text x="795" y="110" fill="var(--text-main)" font-family="var(--font-display)" font-size="14" font-weight="600" text-anchor="middle">4. Ingestion Registry</text>
+            <text x="795" y="130" fill="var(--text-muted)" font-family="var(--font-body)" font-size="11" text-anchor="middle">Canonical DB Storage</text>
+            <text x="795" y="150" fill="var(--text-highlight)" font-family="var(--font-mono)" font-size="10" text-anchor="middle">ihs_alt_data_payments</text>
+          </svg>
+        </div>
+
+        <div class="step-labels">
+          <div class="step-label-card">
+            <div class="step-num">STEP 01</div>
+            <div class="step-title">Trigger Application</div>
+            <div class="step-text">FinHero identifies a finalized merchant application and passes the primary identity fields (IC/Name).</div>
+          </div>
+          <div class="step-label-card">
+            <div class="step-num">STEP 02</div>
+            <div class="step-title">API Lookup Request</div>
+            <div class="step-text">The adapter executes `fetch()`, calling your secure merchant portal API to obtain raw monthly statements.</div>
+          </div>
+          <div class="step-label-card">
+            <div class="step-num">STEP 03</div>
+            <div class="step-title">Adapter Extract</div>
+            <div class="step-text">The adapter's `extract()` method normalizes ARPU stability coefficients, dispute percentages, and active months.</div>
+          </div>
+          <div class="step-label-card">
+            <div class="step-num">STEP 04</div>
+            <div class="step-title">Database Storage</div>
+            <div class="step-text">Normalized fields are stored inside `ihs_alt_data_payments` for evaluation by the risk assessment engine.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Schema Definition -->
+    <section id="schema">
+      <div class="section-title">
+        <div class="section-title-icon">📋</div>
+        <h2>Canonical Payment Fields</h2>
+      </div>
+      <p class="section-desc">
+        Your API does not need to expose a matching schema directly. However, your adapter must translate your 
+        raw API variables into a subset of these 6 fields.
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 25%;">Field Key</th>
+              <th style="width: 15%;">Data Type</th>
+              <th style="width: 20%;">Constraint / Range</th>
+              <th style="width: 40%;">Credit Scoring Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="field-name">paymentsMonthlyVolumeMyrT3</span></td>
+              <td><span class="field-type">number</span></td>
+              <td><span class="field-unit">MYR [0.0 - 100000000.0]</span></td>
+              <td>Average monthly inbound volume in MYR over the trailing 3 months. Highlights recent trade trends.</td>
+            </tr>
+            <tr>
+              <td><span class="field-name">paymentsMonthlyVolumeMyrT12</span></td>
+              <td><span class="field-type">number</span></td>
+              <td><span class="field-unit">MYR [0.0 - 100000000.0]</span></td>
+              <td>Average monthly inbound volume in MYR over the trailing 12 months. Establishes long-term capacity.</td>
+            </tr>
+            <tr>
+              <td><span class="field-name">paymentsArpuStability12m</span></td>
+              <td><span class="field-type">number</span></td>
+              <td><span class="field-unit">ratio [0.0 - 1.0]</span></td>
+              <td>Coefficient-of-variation inverse of monthly volume. Value close to 1 indicates stable, predictable sales.</td>
+            </tr>
+            <tr>
+              <td><span class="field-name">paymentsDisputeRate12m</span></td>
+              <td><span class="field-type">number</span></td>
+              <td><span class="field-unit">ratio [0.0 - 1.0]</span></td>
+              <td>Fraction of transactions disputed or refunded. Higher rates suggest chargeback and operational risks.</td>
+            </tr>
+            <tr>
+              <td><span class="field-name">paymentsCustomerConcentrationTop5Pct</span></td>
+              <td><span class="field-type">number</span></td>
+              <td><span class="field-unit">ratio [0.0 - 1.0]</span></td>
+              <td>Revenue share of top 5 customers. Ratios above 0.70 flag elevated customer dependency risk.</td>
+            </tr>
+            <tr>
+              <td><span class="field-name">paymentsActiveTenureMonths</span></td>
+              <td><span class="field-type">number</span></td>
+              <td><span class="field-unit">months [0 - 600]</span></td>
+              <td>Months since the merchant's first processed transaction. Proxy for business maturity.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Sandbox Playground -->
+    <section id="sandbox">
+      <div class="section-title">
+        <div class="section-title-icon">🧪</div>
+        <h2>API Mapping Playground</h2>
+      </div>
+      <p class="section-desc">
+        Select a preset merchant persona from the reference dataset, or adjust custom sliders in the control panel to see 
+        how raw payment responses map into canonical credit risk metrics.
+      </p>
+
+      <div class="sandbox-grid">
+        <!-- Controls -->
+        <div class="sandbox-controls">
+          <div class="sandbox-header">
+            <span>Inputs Controls</span>
+            <span style="font-size: 11px; font-family: var(--font-mono); color: var(--text-highlight);">interactive</span>
+          </div>
+
+          <div class="persona-selector">
+            <label>Load Merchant Persona:</label>
+            <div class="persona-btn-group">
+              <button class="btn-persona active" onclick="loadPersona('A')">Persona A</button>
+              <button class="btn-persona" onclick="loadPersona('B')">Persona B</button>
+              <button class="btn-persona" onclick="loadPersona('C')">Persona C</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="input-mname">Merchant Business Name</label>
+            <input type="text" id="input-mname" oninput="calculateMapping()">
+          </div>
+
+          <div class="form-group">
+            <label for="input-tenure">Active Tenure (Months)</label>
+            <input type="number" id="input-tenure" min="0" max="600" oninput="calculateMapping()">
+          </div>
+
+          <div class="form-group">
+            <label for="input-vol3">T3 Monthly Vol (MYR)</label>
+            <input type="number" id="input-vol3" min="0" max="10000000" step="1000" oninput="calculateMapping()">
+          </div>
+
+          <div class="form-group">
+            <label for="input-vol12">T12 Monthly Vol (MYR)</label>
+            <input type="number" id="input-vol12" min="0" max="10000000" step="1000" oninput="calculateMapping()">
+          </div>
+
+          <div class="form-group">
+            <label for="input-stability">ARPU Stability (0.0 - 1.0)</label>
+            <input type="number" id="input-stability" min="0" max="1" step="0.01" oninput="calculateMapping()">
+          </div>
+
+          <div class="form-group">
+            <label for="input-dispute">Dispute Rate (0.0 - 1.0)</label>
+            <input type="number" id="input-dispute" min="0" max="1" step="0.001" oninput="calculateMapping()">
+          </div>
+
+          <div class="form-group">
+            <label for="input-concentration">Concentration Ratio (Top 5%)</label>
+            <input type="number" id="input-concentration" min="0" max="1" step="0.01" oninput="calculateMapping()">
+          </div>
+        </div>
+
+        <!-- Displays -->
+        <div class="sandbox-payload-visualizer">
+          <!-- Left: Raw API Response -->
+          <div class="payload-card">
+            <div class="payload-card-header">
+              <span>MERCHANT_API_PAYLOAD.JSON</span>
+              <span class="badge-header">Upstream Raw</span>
+            </div>
+            <pre class="payload-code"><code id="code-raw"></code></pre>
+          </div>
+
+          <!-- Connector -->
+          <div class="visualizer-connector">
+            <div class="arrow-icon">➔</div>
+            <div class="mapping-label">extract()</div>
+          </div>
+
+          <!-- Right: Canonical Extracted Object -->
+          <div class="payload-card">
+            <div class="payload-card-header">
+              <span>CANONICAL_EXTRACTION.JSON</span>
+              <span class="badge-header blue">Adapter Output</span>
+            </div>
+            <pre class="payload-code"><code id="code-canonical" style="color: #cbd5e1;"></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Code Snippets Tabbed Section -->
+    <section id="source-code">
+      <div class="section-title">
+        <div class="section-title-icon">💻</div>
+        <h2>Source Adapter Implementation</h2>
+      </div>
+      <p class="section-desc">
+        Reference configurations for the Payments mapping adapter. Implement `fetch` and `extract` methods 
+        conformant to the `payment-network` schema specifications.
+      </p>
+
+      <div class="tabs-container">
+        <div class="tabs-header">
+          <button class="tab-btn active" onclick="switchTab(event, 'tab-manifest')">manifest.json</button>
+          <button class="tab-btn" onclick="switchTab(event, 'tab-extract')">extract.mjs</button>
+          <button class="tab-btn" onclick="switchTab(event, 'tab-test')">test.mjs</button>
+        </div>
+
+        <!-- manifest.json tab -->
+        <div id="tab-manifest" class="tab-content active">
+          <div class="code-wrapper">
+            <button class="btn-copy" onclick="copySnippet('code-manifest')">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 17.7C8 19 9 20 10.3 20h7.4c1.3 0 2.3-1 2.3-2.3V10.3C20 9 19 8 17.7 8h-7.4C9 8 8 9 8 10.3v7.4z"></path><path d="M16 8V6.3C16 5 15 4 13.7 4H6.3C5 4 4 5 4 6.3v7.4C4 15 5 16 6.3 16H8"></path></svg>
+              Copy Code
+            </button>
+            <pre class="code-block"><code id="code-manifest"><span class="code-comment">// manifest.json: Declares entrypoint & outputs metadata</span>
+{
+  <span class="code-property">"manifestVersion"</span>: <span class="code-number">1</span>,
+  <span class="code-property">"id"</span>: <span class="code-string">"payments-network-adapter-v1"</span>,
+  <span class="code-property">"displayName"</span>: <span class="code-string">"Gateway Transaction Ingestion"</span>,
+  <span class="code-property">"category"</span>: <span class="code-string">"payment-network"</span>,
+  <span class="code-property">"version"</span>: <span class="code-number">1</span>,
+  <span class="code-property">"produces"</span>: [
+    <span class="code-string">"paymentsMonthlyVolumeMyrT3"</span>,
+    <span class="code-string">"paymentsMonthlyVolumeMyrT12"</span>,
+    <span class="code-string">"paymentsArpuStability12m"</span>,
+    <span class="code-string">"paymentsDisputeRate12m"</span>,
+    <span class="code-string">"paymentsCustomerConcentrationTop5Pct"</span>,
+    <span class="code-string">"paymentsActiveTenureMonths"</span>
+  ],
+  <span class="code-property">"requiredIdentityFields"</span>: [],
+  <span class="code-property">"implementation"</span>: {
+    <span class="code-property">"type"</span>: <span class="code-string">"typescript"</span>,
+    <span class="code-property">"entryPoint"</span>: <span class="code-string">"extract.mjs"</span>
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- extract.mjs tab -->
+        <div id="tab-extract" class="tab-content">
+          <div class="code-wrapper">
+            <button class="btn-copy" onclick="copySnippet('code-extract-snippet')">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 17.7C8 19 9 20 10.3 20h7.4c1.3 0 2.3-1 2.3-2.3V10.3C20 9 19 8 17.7 8h-7.4C9 8 8 9 8 10.3v7.4z"></path><path d="M16 8V6.3C16 5 15 4 13.7 4H6.3C5 4 4 5 4 6.3v7.4C4 15 5 16 6.3 16H8"></path></svg>
+              Copy Code
+            </button>
+            <pre class="code-block"><code id="code-extract-snippet"><span class="code-comment">// extract.mjs: Queries API, transforms metrics to canonical fields</span>
+<span class="code-keyword">const</span> API_URL = process.env.FAKE_PAYMENTS_API_URL ?? <span class="code-string">"http://fake-payments-api:4200"</span>;
+<span class="code-keyword">const</span> API_KEY = process.env.FAKE_PAYMENTS_API_KEY ?? <span class="code-string">"demo-key"</span>;
+
+<span class="code-keyword">const</span> adapter = {
+  <span class="code-property">id</span>: <span class="code-string">"payments-network-adapter-v1"</span>,
+  <span class="code-property">category</span>: <span class="code-string">"payment-network"</span>,
+  <span class="code-property">version</span>: <span class="code-number">1</span>,
+  <span class="code-property">produces</span>: [
+    <span class="code-string">"paymentsMonthlyVolumeMyrT3"</span>,
+    <span class="code-string">"paymentsMonthlyVolumeMyrT12"</span>,
+    <span class="code-string">"paymentsArpuStability12m"</span>,
+    <span class="code-string">"paymentsDisputeRate12m"</span>,
+    <span class="code-string">"paymentsCustomerConcentrationTop5Pct"</span>,
+    <span class="code-string">"paymentsActiveTenureMonths"</span>
+  ],
+
+  <span class="code-keyword">async</span> <span class="code-function">fetch</span>(identity) {
+    <span class="code-keyword">if</span> (!identity?.ic || !identity?.fullName) {
+      <span class="code-keyword">throw</span> <span class="code-keyword">new</span> <span class="code-function">Error</span>(<span class="code-string">"fake-payments-v1: identity.ic and identity.fullName are required"</span>);
+    }
+    <span class="code-keyword">const</span> res = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(<span class="code-string">`</span>${API_URL}<span class="code-string">/v1/merchants/lookup`</span>, {
+      <span class="code-property">method</span>: <span class="code-string">"POST"</span>,
+      <span class="code-property">headers</span>: {
+        <span class="code-string">"content-type"</span>: <span class="code-string">"application/json"</span>,
+        <span class="code-string">"x-api-key"</span>: API_KEY
+      },
+      <span class="code-property">body</span>: JSON.stringify({ <span class="code-property">ic</span>: identity.ic, <span class="code-property">fullName</span>: identity.fullName })
+    });
+    
+    <span class="code-keyword">if</span> (!res.ok) {
+      <span class="code-keyword">throw</span> <span class="code-keyword">new</span> <span class="code-function">Error</span>(<span class="code-string">`fake-payments-v1 fetch failed: HTTP </span>${res.status}<span class="code-string">`</span>);
+    }
+    <span class="code-keyword">return</span> res.json();
+  },
+
+  <span class="code-keyword">async</span> <span class="code-function">extract</span>(raw) {
+    <span class="code-keyword">const</span> metrics = raw.paymentsMetrics ?? {};
+    <span class="code-keyword">return</span> [{
+      <span class="code-property">instanceKey</span>: <span class="code-string">"default"</span>,
+      <span class="code-property">observedAt</span>: <span class="code-keyword">new</span> <span class="code-function">Date</span>().toISOString(),
+      <span class="code-property">values</span>: {
+        <span class="code-property">paymentsMonthlyVolumeMyrT3</span>: Number(metrics.monthlyVolumeMyrT3 ?? <span class="code-number">0</span>),
+        <span class="code-property">paymentsMonthlyVolumeMyrT12</span>: Number(metrics.monthlyVolumeMyrT12 ?? <span class="code-number">0</span>),
+        <span class="code-property">paymentsArpuStability12m</span>: Number(metrics.arpuStability12m ?? <span class="code-number">0</span>),
+        <span class="code-property">paymentsDisputeRate12m</span>: Number(metrics.disputeRate12m ?? <span class="code-number">0</span>),
+        <span class="code-property">paymentsCustomerConcentrationTop5Pct</span>: Number(metrics.customerConcentrationTop5Pct ?? <span class="code-number">0</span>),
+        <span class="code-property">paymentsActiveTenureMonths</span>: Number(metrics.activeTenureMonths ?? <span class="code-number">0</span>)
+      }
+    }];
+  }
+};
+
+<span class="code-keyword">export default</span> adapter;</code></pre>
+          </div>
+        </div>
+
+        <!-- test.mjs tab -->
+        <div id="tab-test" class="tab-content">
+          <div class="code-wrapper">
+            <button class="btn-copy" onclick="copySnippet('code-test-snippet')">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 17.7C8 19 9 20 10.3 20h7.4c1.3 0 2.3-1 2.3-2.3V10.3C20 9 19 8 17.7 8h-7.4C9 8 8 9 8 10.3v7.4z"></path><path d="M16 8V6.3C16 5 15 4 13.7 4H6.3C5 4 4 5 4 6.3v7.4C4 15 5 16 6.3 16H8"></path></svg>
+              Copy Code
+            </button>
+            <pre class="code-block"><code id="code-test-snippet"><span class="code-comment">// test.mjs: Offline verification tests</span>
+<span class="code-keyword">import</span> { runFixtures } <span class="code-keyword">from</span> <span class="code-string">"@finsys/adapter-toolkit"</span>;
+<span class="code-keyword">import</span> adapter <span class="code-keyword">from</span> <span class="code-string">"./extract.mjs"</span>;
+
+<span class="code-keyword">const</span> fixtures = [
+  {
+    <span class="code-property">name</span>: <span class="code-string">"hassan-trading"</span>,
+    <span class="code-property">identity</span>: { <span class="code-property">ihsId</span>: <span class="code-number">1</span>, <span class="code-property">ic</span>: <span class="code-string">"850101015432"</span>, <span class="code-property">fullName</span>: <span class="code-string">"Aiman bin Hassan"</span> },
+    <span class="code-property">expected</span>: [
+      {
+        <span class="code-property">instanceKey</span>: <span class="code-string">"default"</span>,
+        <span class="code-property">values</span>: {
+          <span class="code-property">paymentsActiveTenureMonths</span>: <span class="code-number">38</span>,
+          <span class="code-property">paymentsMonthlyVolumeMyrT3</span>: <span class="code-number">285000</span>
+        }
+      }
+    ]
+  }
+];
+
+<span class="code-keyword">const</span> results = <span class="code-keyword">await</span> <span class="code-function">runFixtures</span>(adapter, fixtures);
+console.log(results);
+<span class="code-keyword">if</span> (results.some(<span class="code-property">r</span> => !r.ok)) {
+  console.error(<span class="code-string">"❌ Payments test suite failed"</span>);
+  process.exit(<span class="code-number">1</span>);
+} <span class="code-keyword">else</span> {
+  console.log(<span class="code-string">"✅ Payments metrics verification passed!"</span>);
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testing & Sandbox Commands -->
+    <section id="testing">
+      <div class="section-title">
+        <div class="section-title-icon">🛠️</div>
+        <h2>Testing & Validation Run Commands</h2>
+      </div>
+      <p class="section-desc">
+        Validate manifest schemas and test mapping logic locally using the CLI or docker configurations.
+      </p>
+
+      <!-- Terminal 1 -->
+      <div class="terminal-card">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+          </div>
+          <span class="terminal-title">bash — manifest validation</span>
+        </div>
+        <div class="terminal-body">
+          <button class="btn-copy" onclick="copyText('validate-cmd')">Copy</button>
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-cmd" id="validate-cmd">npx finsys-adapter-toolkit validate ./my-payments-adapter</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-output">✓ Parsing manifest.json schema...
+✓ Resolved entry point extract.mjs
+✓ Validated categories mapping matches 'payment-network' fields...
+✅ Validation passed successfully!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terminal 2 -->
+      <div class="terminal-card">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+          </div>
+          <span class="terminal-title">bash — run offline fixtures</span>
+        </div>
+        <div class="terminal-body">
+          <button class="btn-copy" onclick="copyText('run-test-cmd')">Copy</button>
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-cmd" id="run-test-cmd">node ./my-payments-adapter/test.mjs</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-output">Running 1 fixture checks against adapter...
+[Fixture: hassan-trading]
+  - Tenure check: 38 - OK
+  - Volume T3 check: 285000 - OK
+✅ All tests passed.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terminal 3 -->
+      <div class="terminal-card">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+          </div>
+          <span class="terminal-title">docker — local sandbox deployment</span>
+        </div>
+        <div class="terminal-body">
+          <button class="btn-copy" onclick="copyText('docker-cmd')">Copy</button>
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-cmd" id="docker-cmd">docker compose -f examples/fake-payments/docker-compose.yml up --build -d</span>
+          </div>
+          <div class="terminal-line">
+            <span class="terminal-output">Building fake-payments-api...
+Creating fake-payments-api-container ... done
+Attaching API endpoint to localhost:4200</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 FinHero Inc. Built for Payment Gateway Engineering Teams. Read the full <a href="./integration-guide.md">Integration Document</a>.</p>
+  </footer>
+
+  <!-- Interactive script -->
+  <script>
+    // Mock merchant database personas
+    const personas = {
+      'A': {
+        name: 'Hassan Trading Sdn Bhd',
+        ic: '850101015432',
+        tenure: 38,
+        vol3: 285000,
+        vol12: 240000,
+        stability: 0.92,
+        dispute: 0.0008,
+        concentration: 0.18
+      },
+      'B': {
+        name: 'Bee Lin Beauty Sdn Bhd',
+        ic: '920514075321',
+        tenure: 22,
+        vol3: 95000,
+        vol12: 88000,
+        stability: 0.78,
+        dispute: 0.004,
+        concentration: 0.33
+      },
+      'C': {
+        name: 'Chong Wei Catering',
+        ic: '991230146789',
+        tenure: 5,
+        vol3: 12500,
+        vol12: 18400,
+        stability: 0.34,
+        dispute: 0.027,
+        concentration: 0.71
+      }
+    };
+
+    // Load initial persona
+    window.onload = function() {
+      loadPersona('A');
+    };
+
+    function loadPersona(letter) {
+      const buttons = document.querySelectorAll('.btn-persona');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      const activeIdx = letter === 'A' ? 0 : letter === 'B' ? 1 : 2;
+      buttons[activeIdx].classList.add('active');
+
+      const data = personas[letter];
+      
+      document.getElementById('input-mname').value = data.name;
+      document.getElementById('input-tenure').value = data.tenure;
+      document.getElementById('input-vol3').value = data.vol3;
+      document.getElementById('input-vol12').value = data.vol12;
+      document.getElementById('input-stability').value = data.stability;
+      document.getElementById('input-dispute').value = data.dispute;
+      document.getElementById('input-concentration').value = data.concentration;
+
+      calculateMapping();
+    }
+
+    function calculateMapping() {
+      const name = document.getElementById('input-mname').value;
+      const tenure = parseInt(document.getElementById('input-tenure').value) || 0;
+      const vol3 = parseFloat(document.getElementById('input-vol3').value) || 0;
+      const vol12 = parseFloat(document.getElementById('input-vol12').value) || 0;
+      const stability = parseFloat(document.getElementById('input-stability').value) || 0;
+      const dispute = parseFloat(document.getElementById('input-dispute').value) || 0;
+      const concentration = parseFloat(document.getElementById('input-concentration').value) || 0;
+
+      const activePersonaBtn = document.querySelector('.btn-persona.active');
+      const personaLetter = activePersonaBtn ? activePersonaBtn.textContent.trim().slice(-1) : 'A';
+      const defaultIc = personas[personaLetter] ? personas[personaLetter].ic : '850101015432';
+
+      const rawPayload = {
+        ic: defaultIc,
+        requestedName: name,
+        matchedName: name,
+        merchantSince: new Date(new Date().setMonth(new Date().getMonth() - tenure)).toISOString().split('T')[0],
+        paymentsMetrics: {
+          monthlyVolumeMyrT3: vol3,
+          monthlyVolumeMyrT12: vol12,
+          arpuStability12m: stability,
+          disputeRate12m: dispute,
+          customerConcentrationTop5Pct: concentration,
+          activeTenureMonths: tenure
+        }
+      };
+
+      const canonicalExtraction = [
+        {
+          instanceKey: "default",
+          observedAt: new Date().toISOString(),
+          values: {
+            paymentsMonthlyVolumeMyrT3: vol3,
+            paymentsMonthlyVolumeMyrT12: vol12,
+            paymentsArpuStability12m: stability,
+            paymentsDisputeRate12m: dispute,
+            paymentsCustomerConcentrationTop5Pct: concentration,
+            paymentsActiveTenureMonths: tenure
+          }
+        }
+      ];
+
+      document.getElementById('code-raw').textContent = JSON.stringify(rawPayload, null, 2);
+      document.getElementById('code-canonical').textContent = JSON.stringify(canonicalExtraction, null, 2);
+    }
+
+    function switchTab(evt, tabId) {
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => content.classList.remove('active'));
+
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      evt.currentTarget.classList.add('active');
+    }
+
+    function copySnippet(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      copyToClipboard(text);
+    }
+
+    function copyText(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      copyToClipboard(text);
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied to clipboard!');
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
+    }
+  </script>
+</body>
+</html>
