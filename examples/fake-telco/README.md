@@ -12,8 +12,8 @@ A complete, runnable example of a FinSys Source Adapter:
   adapter is a directory you mount into a FinSys / FinSim stack alongside.
 
 The same shape (`manifest.json` + `extract.mjs` + optional `fetch`) is what
-a partner ships when building a real adapter against Celcom, NTT/iPay88,
-GHL, etc.
+a partner ships when building a real adapter against a major telco
+carrier, a payments processor, or another external data source.
 
 ## Personas
 
@@ -84,8 +84,8 @@ ready to drop into a FinSys host.
 - **Self-contained.** No real carrier credentials needed. Clone, build,
   run.
 - **Realistic shape.** `fetch(identity)` returns a real HTTP payload
-  the adapter then transforms — the same flow a Celcom or GHL adapter
-  follows.
+  the adapter then transforms — the same flow a real carrier or
+  payments adapter follows.
 - **Tunable.** Edit `api/data/applicants.json` to add personas or
   change values, then exercise the eval engine against the new
   numbers without touching either the adapter or the host.
