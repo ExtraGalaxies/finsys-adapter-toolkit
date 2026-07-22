@@ -4,7 +4,7 @@
  * who want to develop + test their adapter without standing up the
  * full FinSys stack.
  *
- * v0.1.0 minimum-viable surface; expanding as Celcom-side feedback
+ * v0.1.0 minimum-viable surface; expanding as adapter-partner feedback
  * sharpens what partners actually need.
  */
 
