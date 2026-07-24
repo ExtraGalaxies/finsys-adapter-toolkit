@@ -34,7 +34,7 @@
     "npm": ">=12.0.1"
   },
   "dependencies": {
-    "@finsys/core": "^3.1.0",
+    "@finsys/core": "^4.8.0",
     "ajv": "^8.20.0"
   },
   "devDependencies": {
@@ -51,6 +51,7 @@
     "url": "https://github.com/ExtraGalaxies/finsys-adapter-toolkit.git"
   },
   "allowScripts": {
-    "esbuild": false
+    "esbuild": false,
+    "fsevents": false
   }
 }

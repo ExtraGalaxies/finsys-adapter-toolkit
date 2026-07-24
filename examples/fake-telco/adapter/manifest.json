@@ -11,12 +11,22 @@
     "telcoSuspensionsCount24m",
     "telcoArpuMyr",
     "telcoHandsetFinancingActive",
-    "telcoHandsetFinancingDelinquent"
+    "telcoHandsetFinancingDelinquent",
+    "telcoPaymentReliabilityTier",
+    "telcoTenureTier",
+    "telcoDistressTier",
+    "telcoHandsetRiskTier"
   ],
   "requiredIdentityFields": [],
   "implementation": {
     "type": "typescript",
     "entryPoint": "extract.mjs"
   },
-  "notes": "Reference adapter shipped with @finsys/adapter-toolkit. Pairs with the sibling fake-telco-api container; configure FAKE_TELCO_API_URL + FAKE_TELCO_API_KEY in the host environment. requiredIdentityFields is empty because this adapter only needs the core ApplicantIdentity trio (ihsId, ic, fullName) — declaring core fields here is a schema error since they may legitimately be absent for non-MY scope; the adapter's fetch() does its own defensive check and throws AdapterError('payload_invalid') if ic/fullName are empty."
+  "enumValues": {
+    "telcoPaymentReliabilityTier": ["1", "2", "3", "4"],
+    "telcoTenureTier": ["1", "2", "3"],
+    "telcoDistressTier": ["1", "2", "3", "4"],
+    "telcoHandsetRiskTier": ["N", "Y"]
+  },
+  "notes": "Reference adapter shipped with @finsys/adapter-toolkit. Pairs with the sibling fake-telco-api container; configure FAKE_TELCO_API_URL + FAKE_TELCO_API_KEY in the host environment. requiredIdentityFields is empty because this adapter only needs the core ApplicantIdentity trio (ihsId, ic, fullName) — declaring core fields here is a schema error since they may legitimately be absent for non-MY scope; the adapter's fetch() does its own defensive check and throws AdapterError('payload_invalid') if ic/fullName are empty. SYS-3033: the four *Tier fields are coarse-bucket enum-kind parallels of this adapter's own continuous/discrete signals (payment ratio, tenure months, suspensions+late-days, handset flags) -- deliberately declared with numeric-string labels (\"1\"-\"4\", \"N\"/\"Y\") to exercise the string-coercion seam a code review caught breaking scoring when a numeric-looking label got silently coerced to a number downstream."
 }
