@@ -13,6 +13,11 @@
 
 const API_URL = process.env.FAKE_TELCO_API_URL ?? "http://fake-telco-api:4100"
 const API_KEY = process.env.FAKE_TELCO_API_KEY ?? "demo-key"
+// DEVOPS-540 gate hook, hardening per QA review: the test-override marker
+// below is otherwise unconditional -- gating it behind an explicit env flag
+// means the shipped reference adapter can't honor it in any non-test mount,
+// only when a test harness deliberately opts in.
+const TEST_HOOKS_ENABLED = process.env.FAKE_TELCO_ENABLE_TEST_HOOKS === "1"
 
 const adapter = {
   id: "fake-telco-v1",
@@ -43,6 +48,21 @@ const adapter = {
     if (!identity?.ic || !identity?.fullName) {
       throw new Error("fake-telco-v1: identity.ic and identity.fullName are required")
     }
+    // DEVOPS-540 gate hook: a narrow, deliberate test-only override so the
+    // enum ingest gate's refusal paths (out-of-set label, non-string
+    // label) can be exercised through this REAL default-mounted reference
+    // adapter rather than a separate test-only fixture -- same "marker in
+    // fullName" convention as compose/fixtures/adapter-registry-enum's
+    // dedicated gate fixture. Gated behind FAKE_TELCO_ENABLE_TEST_HOOKS so
+    // the shipped adapter can't honor the marker in any non-test mount;
+    // every other identity (and every mount without the flag set) takes
+    // the normal upstream path below.
+    if (TEST_HOOKS_ENABLED && identity.fullName.includes("FAKETELCO:DISTRESS_OOR")) {
+      return { _enumTestOverride: "out-of-set" }
+    }
+    if (TEST_HOOKS_ENABLED && identity.fullName.includes("FAKETELCO:DISTRESS_NUM")) {
+      return { _enumTestOverride: "non-string" }
+    }
     const res = await fetch(`${API_URL}/v1/subscribers/lookup`, {
       method: "POST",
       headers: {
@@ -59,6 +79,25 @@ const adapter = {
   },
 
   async extract(raw) {
+    if (raw._enumTestOverride === "out-of-set") {
+      return [
+        {
+          instanceKey: "default",
+          observedAt: new Date().toISOString(),
+          values: { telcoTenureMonths: 12, telcoDistressTier: "5" }, // "5" is not in this adapter's declared set (["1","2","3","4"])
+        },
+      ]
+    }
+    if (raw._enumTestOverride === "non-string") {
+      return [
+        {
+          instanceKey: "default",
+          observedAt: new Date().toISOString(),
+          values: { telcoTenureMonths: 12, telcoDistressTier: 2 }, // JS number, not the string "2" -- host must not coerce
+        },
+      ]
+    }
+
     const since = new Date(raw.subscriberSince)
     const now = new Date()
     const tenureMonths = Math.max(
