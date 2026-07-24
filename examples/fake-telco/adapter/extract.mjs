@@ -79,7 +79,10 @@ const adapter = {
   },
 
   async extract(raw) {
-    if (raw._enumTestOverride === "out-of-set") {
+    // M1 hardening (PR #11 review): recognition of the override shape is
+    // gated too — with hooks off, the extract path is provably inert for
+    // ANY raw payload, even one that happens to carry this field name.
+    if (TEST_HOOKS_ENABLED && raw._enumTestOverride === "out-of-set") {
       return [
         {
           instanceKey: "default",
@@ -88,7 +91,7 @@ const adapter = {
         },
       ]
     }
-    if (raw._enumTestOverride === "non-string") {
+    if (TEST_HOOKS_ENABLED && raw._enumTestOverride === "non-string") {
       return [
         {
           instanceKey: "default",
