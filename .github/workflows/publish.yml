@@ -9,4 +9,11 @@ permissions:
 
 jobs:
   publish:
-    uses: ExtraGalaxies/finsys-core/.github/workflows/npm-package-publish.yml@0e5ea9ad63ca61cca3a85247ee9ebbc30e62cca1
+    # Pinned to a finsys-core commit that INCLUDES the DEVOPS-524 fix. The
+    # previous pin predated it, so every publish from this repo died on
+    # EUNKNOWNCONFIG: setup-node writes a legacy `always-auth` key whenever
+    # registry-url is set, npm 12 removed the key, and the strict-npmrc
+    # baseline turns the old warning into a hard error. It killed the v0.1.2
+    # publish. Bumping the pin is the whole fix -- the reusable workflow
+    # already strips the key.
+    uses: ExtraGalaxies/finsys-core/.github/workflows/npm-package-publish.yml@232a0318c134c7cac2b2b807aa59baecbae9e481
