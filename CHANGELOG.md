@@ -4,6 +4,27 @@ All notable changes to `@finsys/adapter-toolkit` are documented here.
 Versions publish to npm on a **GitHub Release** (not on merge to main) —
 cutting a release tag is the explicit cutover.
 
+## 0.1.2
+
+Republished so the shipped artifacts match the anonymized source. No API
+changes; no source changes beyond the version bump.
+
+0.1.1 was packed from a checkout predating the partner-name anonymization,
+so two artifacts still carried a named carrier that the source no longer
+does: `examples/fake-telco/README.md`, and — less obviously —
+`dist/index.js.map`. Source maps embed the ORIGINAL source text, including
+comments, so editing a comment in `src/` does not remove it from an
+already-published map. Anyone auditing only the `.ts` files would have
+concluded the package was clean.
+
+Also removes named third-party companies from the payments example, which
+referred to two brands that have since rebranded. A stale brand name is
+worse than none: it misnames the company and dates the material. The
+examples now describe the category ("a payment gateway", "a POS-terminal
+network") rather than naming anyone.
+
+Anyone on 0.1.1 should upgrade; there is no functional difference.
+
 ## 0.1.1
 
 Re-release of 0.1.0 with `dist/` actually included. The hand-published

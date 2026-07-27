@@ -4,7 +4,7 @@ A complete, runnable example of a `payment-network` FinSys Source Adapter:
 
 - **`api/`** — a tiny Express service (`fake-payments-api`) that serves
   canned per-merchant payment metrics for three personas (strong /
-  mid / weak). Stand-in for a real a payment gateway or a POS-terminal network merchant lookup.
+  mid / weak). Stand-in for a real payment-gateway or POS-terminal merchant lookup.
 - **`adapter/`** — `fake-payments-v1`, a `payment-network` adapter that
   calls the fake API via `fetch(identity)` and translates the response
   into canonical payment-network fields.
