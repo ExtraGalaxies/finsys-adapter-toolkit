@@ -1,7 +1,7 @@
 {
   "name": "fake-payments-api",
   "version": "0.1.0",
-  "description": "Reference fake payment-network API for the FinSys Source Adapter Framework example. Serves canned merchant-level payment metrics so partners can prototype a payment-network adapter without standing up a real a payment gateway/a POS-terminal network integration.",
+  "description": "Reference fake payment-network API for the FinSys Source Adapter Framework example. Serves canned merchant-level payment metrics so partners can prototype a payment-network adapter without standing up a real payment-network integration.",
   "private": true,
   "type": "module",
   "main": "server.mjs",

@@ -4,7 +4,8 @@
  * translates its response into canonical payment-network fields.
  *
  * Same shape as fake-telco-v1, different category + upstream. A real
- * partner adapter (a payment gateway, a POS-terminal network, etc.) follows the same pattern:
+ * partner adapter (a payment gateway, a POS-terminal network, etc.)
+ * follows the same pattern:
  *   - fetch(identity)  → call the upstream service, return RawPayload
  *   - extract(raw)     → map upstream → canonical AdapterExtraction[]
  */
