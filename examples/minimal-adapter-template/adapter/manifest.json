@@ -4,6 +4,7 @@
   "displayName": "Minimal adapter template",
   "category": "telco-carrier",
   "version": 1,
+  "cardinality": "single",
   "produces": ["telcoOnTimePaymentRatio24m", "telcoTenureMonths"],
   "requiredIdentityFields": [],
   "implementation": { "type": "typescript", "entryPoint": "extract.mjs" }
