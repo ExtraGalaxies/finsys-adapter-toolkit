@@ -4,6 +4,7 @@
   "displayName": "Fake Trade-Credit (reference)",
   "category": "trade-credit",
   "version": 1,
+  "cardinality": "single",
   "produces": [
     "arDaysSalesOutstanding",
     "apDaysPayableOutstanding",

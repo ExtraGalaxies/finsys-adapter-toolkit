@@ -4,6 +4,7 @@
   "displayName": "Fake Payment Network (reference)",
   "category": "payment-network",
   "version": 1,
+  "cardinality": "single",
   "produces": [
     "paymentsMonthlyVolumeMyrT3",
     "paymentsMonthlyVolumeMyrT12",
