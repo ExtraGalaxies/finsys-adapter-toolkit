@@ -4,6 +4,7 @@
   "displayName": "Fake Social (reference)",
   "category": "social-media",
   "version": 1,
+  "cardinality": "single",
   "produces": [
     "socialAccountTenureMonths",
     "socialFollowerCount",

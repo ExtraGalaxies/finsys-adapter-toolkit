@@ -4,6 +4,7 @@
   "displayName": "Fake Telco Carrier (reference)",
   "category": "telco-carrier",
   "version": 1,
+  "cardinality": "single",
   "produces": [
     "telcoTenureMonths",
     "telcoOnTimePaymentRatio24m",
