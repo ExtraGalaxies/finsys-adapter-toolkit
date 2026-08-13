@@ -1099,7 +1099,7 @@
               <td>Days Payable Outstanding — average days taken to pay suppliers. Very high suggests cash flow strain.</td>
             </tr>
             <tr>
-              <td><span class="field-name">arTotalOutstandingMyr</span></td>
+              <td><span class="field-name">arTotalOutstanding</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">MYR [0.0 - 1e9]</span></td>
               <td>Total accounts receivable balance outstanding. Shows the size of the debtor book.</td>
@@ -1129,7 +1129,7 @@
               <td>Supplier-reported payment defaults or returned payments. Direct distress indicator.</td>
             </tr>
             <tr>
-              <td><span class="field-name">accountingRevenue12mMyr</span></td>
+              <td><span class="field-name">accountingRevenue12m</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">MYR [0.0 - 1e9]</span></td>
               <td>Trailing 12-month turnover per general ledger. Cross-referenced against bank statements.</td>
@@ -1303,12 +1303,12 @@
   <span class="code-property">"produces"</span>: [
     <span class="code-string">"arDaysSalesOutstanding"</span>,
     <span class="code-string">"apDaysPayableOutstanding"</span>,
-    <span class="code-string">"arTotalOutstandingMyr"</span>,
+    <span class="code-string">"arTotalOutstanding"</span>,
     <span class="code-string">"arCurrentRatio"</span>,
     <span class="code-string">"arOverdue90PlusRatio"</span>,
     <span class="code-string">"debtorConcentrationTop5Ratio"</span>,
     <span class="code-string">"tradeReferenceDefaults12m"</span>,
-    <span class="code-string">"accountingRevenue12mMyr"</span>,
+    <span class="code-string">"accountingRevenue12m"</span>,
     <span class="code-string">"grossMarginPct"</span>,
     <span class="code-string">"cashConversionCycleDays"</span>
   ],
@@ -1342,12 +1342,12 @@
   <span class="code-property">produces</span>: [
     <span class="code-string">"arDaysSalesOutstanding"</span>,
     <span class="code-string">"apDaysPayableOutstanding"</span>,
-    <span class="code-string">"arTotalOutstandingMyr"</span>,
+    <span class="code-string">"arTotalOutstanding"</span>,
     <span class="code-string">"arCurrentRatio"</span>,
     <span class="code-string">"arOverdue90PlusRatio"</span>,
     <span class="code-string">"debtorConcentrationTop5Ratio"</span>,
     <span class="code-string">"tradeReferenceDefaults12m"</span>,
-    <span class="code-string">"accountingRevenue12mMyr"</span>,
+    <span class="code-string">"accountingRevenue12m"</span>,
     <span class="code-string">"grossMarginPct"</span>,
     <span class="code-string">"cashConversionCycleDays"</span>
   ],
@@ -1381,12 +1381,12 @@
       <span class="code-property">values</span>: {
         <span class="code-property">arDaysSalesOutstanding</span>: Number(raw.metrics?.daysSalesOutstanding ?? <span class="code-number">0</span>),
         <span class="code-property">apDaysPayableOutstanding</span>: Number(raw.accountsPayable?.avgDaysOutstanding ?? <span class="code-number">0</span>),
-        <span class="code-property">arTotalOutstandingMyr</span>: total,
+        <span class="code-property">arTotalOutstanding</span>: total,
         <span class="code-property">arCurrentRatio</span>: ratio(Number(aging.current ?? <span class="code-number">0</span>), total),
         <span class="code-property">arOverdue90PlusRatio</span>: ratio(Number(aging.d90plus ?? <span class="code-number">0</span>), total),
         <span class="code-property">debtorConcentrationTop5Ratio</span>: round4(Number(ar.top5DebtorShareRatio ?? <span class="code-number">0</span>)),
         <span class="code-property">tradeReferenceDefaults12m</span>: Number(raw.tradeReferences?.defaults12m ?? <span class="code-number">0</span>),
-        <span class="code-property">accountingRevenue12mMyr</span>: revenue,
+        <span class="code-property">accountingRevenue12m</span>: revenue,
         <span class="code-property">grossMarginPct</span>: ratio(revenue - cogs, revenue),
         <span class="code-property">cashConversionCycleDays</span>: Number(raw.metrics?.cashConversionCycleDays ?? <span class="code-number">0</span>)
       }
@@ -1418,7 +1418,7 @@
         <span class="code-property">instanceKey</span>: <span class="code-string">"default"</span>,
         <span class="code-property">values</span>: {
           <span class="code-property">arDaysSalesOutstanding</span>: <span class="code-number">28</span>,
-          <span class="code-property">accountingRevenue12mMyr</span>: <span class="code-number">2400000</span>
+          <span class="code-property">accountingRevenue12m</span>: <span class="code-number">2400000</span>
         }
       }
     ]
@@ -1666,12 +1666,12 @@ Attaching API endpoint to localhost:4300</span>
           values: {
             arDaysSalesOutstanding: dso,
             apDaysPayableOutstanding: dpo,
-            arTotalOutstandingMyr: artotal,
+            arTotalOutstanding: artotal,
             arCurrentRatio: ratio(current, artotal),
             arOverdue90PlusRatio: ratio(over90, artotal),
             debtorConcentrationTop5Ratio: top5,
             tradeReferenceDefaults12m: defaults,
-            accountingRevenue12mMyr: revenue,
+            accountingRevenue12m: revenue,
             grossMarginPct: ratio(revenue - cogs, revenue),
             cashConversionCycleDays: ccc
           }

@@ -71,7 +71,7 @@ describe("runFixtures", () => {
           {
             instanceKey: "",
             observedAt: "ignored-by-diff",
-            values: { telcoOnTimePaymentRatio24m: 0.96, telcoTenureMonths: 60 },
+            values: { onTimePaymentRatio24m: 0.96, tenureMonths: 60 },
           },
         ],
       },
@@ -82,7 +82,7 @@ describe("runFixtures", () => {
           {
             instanceKey: "",
             observedAt: "ignored-by-diff",
-            values: { telcoOnTimePaymentRatio24m: 0, telcoTenureMonths: 0 },
+            values: { onTimePaymentRatio24m: 0, tenureMonths: 0 },
           },
         ],
       },
@@ -106,7 +106,7 @@ describe("runFixtures", () => {
           {
             instanceKey: "",
             observedAt: "ignored-by-diff",
-            values: { telcoOnTimePaymentRatio24m: 0.99, telcoTenureMonths: 12 },
+            values: { onTimePaymentRatio24m: 0.99, tenureMonths: 12 },
           },
         ],
       },
@@ -121,7 +121,7 @@ describe("MockConsumer", () => {
   const instance = (ratio: number) => ({
     instanceKey: "",
     observedAt: new Date("2026-01-01T00:00:00Z").toISOString(),
-    values: { telcoOnTimePaymentRatio24m: ratio, telcoTenureMonths: 24 },
+    values: { onTimePaymentRatio24m: ratio, tenureMonths: 24 },
   })
 
   it("round-trips persistExtraction → getCanonicalRowsForIhs", () => {
@@ -137,7 +137,7 @@ describe("MockConsumer", () => {
     })
     const rows = consumer.getCanonicalRowsForIhs(7).telco
     expect(rows).toHaveLength(1)
-    expect(rows[0]!.values.telcoOnTimePaymentRatio24m).toBe(0.9)
+    expect(rows[0]!.values.onTimePaymentRatio24m).toBe(0.9)
     // Other applicants see nothing.
     expect(consumer.getCanonicalRowsForIhs(8).telco).toHaveLength(0)
   })
@@ -160,6 +160,6 @@ describe("MockConsumer", () => {
     }
     const rows = consumer.getCanonicalRowsForIhs(7).telco
     expect(rows).toHaveLength(1)
-    expect(rows[0]!.values.telcoOnTimePaymentRatio24m).toBe(0.8)
+    expect(rows[0]!.values.onTimePaymentRatio24m).toBe(0.8)
   })
 })

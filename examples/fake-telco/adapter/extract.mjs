@@ -24,24 +24,24 @@ const adapter = {
   category: "telco-carrier",
   version: 1,
   produces: [
-    "telcoTenureMonths",
-    "telcoOnTimePaymentRatio24m",
-    "telcoLateDays24m",
-    "telcoSuspensionsCount24m",
-    "telcoArpuMyr",
-    "telcoHandsetFinancingActive",
-    "telcoHandsetFinancingDelinquent",
-    // SYS-3033: coarse enum-kind bucket parallels of the continuous/
+    "tenureMonths",
+    "onTimePaymentRatio24m",
+    "lateDays24m",
+    "suspensionsCount24m",
+    "arpu",
+    "handsetFinancingActive",
+    "handsetFinancingDelinquent",
+    // Coarse enum-kind bucket parallels of the continuous/
     // discrete signals above. Labels are declared verbatim in this
     // adapter's manifest.json (enumValues) -- deliberately numeric
     // strings (plus one "N"/"Y" pair) to exercise the string-coercion
     // seam. extract() below must always emit these as STRINGS, never
     // numbers -- a numeric-looking label silently coerced to a number
     // downstream is exactly the bug this fixture exists to pin.
-    "telcoPaymentReliabilityTier",
-    "telcoTenureTier",
-    "telcoDistressTier",
-    "telcoHandsetRiskTier",
+    "paymentReliabilityTier",
+    "tenureTier",
+    "distressTier",
+    "handsetRiskTier",
   ],
 
   async fetch(identity) {
@@ -87,7 +87,7 @@ const adapter = {
         {
           instanceKey: "default",
           observedAt: new Date().toISOString(),
-          values: { telcoTenureMonths: 12, telcoDistressTier: "5" }, // "5" is not in this adapter's declared set (["1","2","3","4"])
+          values: { tenureMonths: 12, distressTier: "5" }, // "5" is not in this adapter's declared set (["1","2","3","4"])
         },
       ]
     }
@@ -96,7 +96,7 @@ const adapter = {
         {
           instanceKey: "default",
           observedAt: new Date().toISOString(),
-          values: { telcoTenureMonths: 12, telcoDistressTier: 2 }, // JS number, not the string "2" -- host must not coerce
+          values: { tenureMonths: 12, distressTier: 2 }, // JS number, not the string "2" -- host must not coerce
         },
       ]
     }
@@ -127,34 +127,34 @@ const adapter = {
     const handsetActive = Boolean(raw.handsetFinancing?.active ?? false)
     const handsetDelinquent = Boolean(raw.handsetFinancing?.delinquent ?? false)
 
-    // SYS-3033: coarse tier labels derived from the same signals above.
+    // Coarse tier labels derived from the same signals above.
     // Every branch returns a STRING literal -- never a bare number -- so
     // a numeric-looking label ("1".."4") survives as a string end-to-end
     // (manifest enumValues -> here -> ingest -> storage -> projection).
-    const telcoPaymentReliabilityTier =
+    const paymentReliabilityTier =
       onTimeRatio >= 0.95 ? "1" : onTimeRatio >= 0.85 ? "2" : onTimeRatio >= 0.7 ? "3" : "4"
-    const telcoTenureTier = tenureMonths < 12 ? "1" : tenureMonths <= 60 ? "2" : "3"
+    const tenureTier = tenureMonths < 12 ? "1" : tenureMonths <= 60 ? "2" : "3"
     const distressScore = suspensions * 2 + late
-    const telcoDistressTier =
+    const distressTier =
       distressScore === 0 ? "1" : distressScore <= 2 ? "2" : distressScore <= 5 ? "3" : "4"
-    const telcoHandsetRiskTier = handsetActive && handsetDelinquent ? "Y" : "N"
+    const handsetRiskTier = handsetActive && handsetDelinquent ? "Y" : "N"
 
     return [
       {
         instanceKey: "default",
         observedAt: new Date().toISOString(),
         values: {
-          telcoTenureMonths: tenureMonths,
-          telcoOnTimePaymentRatio24m: onTimeRatio,
-          telcoLateDays24m: lateDays,
-          telcoSuspensionsCount24m: suspensions,
-          telcoArpuMyr: Number(raw.averageMonthlyArpuMyr ?? 0),
-          telcoHandsetFinancingActive: handsetActive,
-          telcoHandsetFinancingDelinquent: handsetDelinquent,
-          telcoPaymentReliabilityTier,
-          telcoTenureTier,
-          telcoDistressTier,
-          telcoHandsetRiskTier,
+          tenureMonths: tenureMonths,
+          onTimePaymentRatio24m: onTimeRatio,
+          lateDays24m: lateDays,
+          suspensionsCount24m: suspensions,
+          arpu: Number(raw.averageMonthlyArpuMyr ?? 0),
+          handsetFinancingActive: handsetActive,
+          handsetFinancingDelinquent: handsetDelinquent,
+          paymentReliabilityTier,
+          tenureTier,
+          distressTier,
+          handsetRiskTier,
         },
       },
     ]

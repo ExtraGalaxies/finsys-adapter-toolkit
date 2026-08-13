@@ -24,14 +24,14 @@ const adapter = {
   category: "social-media",
   version: 1,
   produces: [
-    "socialAccountTenureMonths",
-    "socialFollowerCount",
-    "socialEngagementRate90d",
-    "socialPostingConsistency12m",
-    "socialVerifiedBusinessAccount",
-    "socialCustomerRatingAvg",
-    "socialNegativeSentimentRatio90d",
-    "socialAccountFlags24m",
+    "accountTenureMonths",
+    "followerCount",
+    "engagementRate90d",
+    "postingConsistency12m",
+    "verifiedBusinessAccount",
+    "customerRatingAvg",
+    "negativeSentimentRatio90d",
+    "accountFlags24m",
   ],
 
   async fetch(identity) {
@@ -60,17 +60,17 @@ const adapter = {
         instanceKey: "default",
         observedAt: new Date().toISOString(),
         values: {
-          socialAccountTenureMonths: Number(profile.accountAgeMonths ?? 0),
-          socialFollowerCount: Number(profile.followers ?? 0),
-          socialEngagementRate90d: round4(Number(raw.engagement90d?.engagementRate ?? 0)),
-          socialPostingConsistency12m: clamp01(ratio(Number(posting.activeMonths ?? 0), 12)),
-          socialVerifiedBusinessAccount: Boolean(profile.verified),
-          socialCustomerRatingAvg: round4(Number(raw.reviews?.avgRating ?? 0)),
-          socialNegativeSentimentRatio90d: ratio(
+          accountTenureMonths: Number(profile.accountAgeMonths ?? 0),
+          followerCount: Number(profile.followers ?? 0),
+          engagementRate90d: round4(Number(raw.engagement90d?.engagementRate ?? 0)),
+          postingConsistency12m: clamp01(ratio(Number(posting.activeMonths ?? 0), 12)),
+          verifiedBusinessAccount: Boolean(profile.verified),
+          customerRatingAvg: round4(Number(raw.reviews?.avgRating ?? 0)),
+          negativeSentimentRatio90d: ratio(
             Number(sentiment.negativeMentions ?? 0),
             Number(sentiment.totalMentions ?? 0),
           ),
-          socialAccountFlags24m: Number(raw.flags24m?.count ?? 0),
+          accountFlags24m: Number(raw.flags24m?.count ?? 0),
         },
       },
     ]

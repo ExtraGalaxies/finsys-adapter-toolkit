@@ -4,6 +4,8 @@ import { pathToFileURL } from "node:url"
 import { createRequire } from "node:module"
 
 import { Ajv, type ValidateFunction } from "ajv"
+
+import { assertSupportedCore } from "./coreVersionGuard.js"
 import {
   type AdapterManifest,
   type SourceAdapter,
@@ -69,6 +71,10 @@ export async function validateAdapter(dir: string): Promise<ValidateAdapterResul
   }
 
   // Cross-check: produces must be subset of category's canonical fields.
+  // SYS-3346: the vocabulary check is the thing a stale core corrupts, so the
+  // guard fires here rather than at import — it warns only when validation
+  // actually happens, and names the skew before the result is trusted.
+  assertSupportedCore()
   const allowed = new Set(categoryFieldsOf(manifest.category))
   const outOfCategory = manifest.produces.filter((f) => !allowed.has(f))
   if (outOfCategory.length > 0) {

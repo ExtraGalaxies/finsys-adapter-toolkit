@@ -1087,37 +1087,37 @@
           </thead>
           <tbody>
             <tr>
-              <td><span class="field-name">paymentsMonthlyVolumeMyrT3</span></td>
+              <td><span class="field-name">monthlyVolume3m</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">MYR [0.0 - 100000000.0]</span></td>
               <td>Average monthly inbound volume in MYR over the trailing 3 months. Highlights recent trade trends.</td>
             </tr>
             <tr>
-              <td><span class="field-name">paymentsMonthlyVolumeMyrT12</span></td>
+              <td><span class="field-name">monthlyVolume12m</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">MYR [0.0 - 100000000.0]</span></td>
               <td>Average monthly inbound volume in MYR over the trailing 12 months. Establishes long-term capacity.</td>
             </tr>
             <tr>
-              <td><span class="field-name">paymentsArpuStability12m</span></td>
+              <td><span class="field-name">arpuStability12m</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">ratio [0.0 - 1.0]</span></td>
               <td>Coefficient-of-variation inverse of monthly volume. Value close to 1 indicates stable, predictable sales.</td>
             </tr>
             <tr>
-              <td><span class="field-name">paymentsDisputeRate12m</span></td>
+              <td><span class="field-name">disputeRate12m</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">ratio [0.0 - 1.0]</span></td>
               <td>Fraction of transactions disputed or refunded. Higher rates suggest chargeback and operational risks.</td>
             </tr>
             <tr>
-              <td><span class="field-name">paymentsCustomerConcentrationTop5Pct</span></td>
+              <td><span class="field-name">customerConcentrationTop5Pct</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">ratio [0.0 - 1.0]</span></td>
               <td>Revenue share of top 5 customers. Ratios above 0.70 flag elevated customer dependency risk.</td>
             </tr>
             <tr>
-              <td><span class="field-name">paymentsActiveTenureMonths</span></td>
+              <td><span class="field-name">activeTenureMonths</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">months [0 - 600]</span></td>
               <td>Months since the merchant's first processed transaction. Proxy for business maturity.</td>
@@ -1253,12 +1253,12 @@
   <span class="code-property">"category"</span>: <span class="code-string">"payment-network"</span>,
   <span class="code-property">"version"</span>: <span class="code-number">1</span>,
   <span class="code-property">"produces"</span>: [
-    <span class="code-string">"paymentsMonthlyVolumeMyrT3"</span>,
-    <span class="code-string">"paymentsMonthlyVolumeMyrT12"</span>,
-    <span class="code-string">"paymentsArpuStability12m"</span>,
-    <span class="code-string">"paymentsDisputeRate12m"</span>,
-    <span class="code-string">"paymentsCustomerConcentrationTop5Pct"</span>,
-    <span class="code-string">"paymentsActiveTenureMonths"</span>
+    <span class="code-string">"monthlyVolume3m"</span>,
+    <span class="code-string">"monthlyVolume12m"</span>,
+    <span class="code-string">"arpuStability12m"</span>,
+    <span class="code-string">"disputeRate12m"</span>,
+    <span class="code-string">"customerConcentrationTop5Pct"</span>,
+    <span class="code-string">"activeTenureMonths"</span>
   ],
   <span class="code-property">"requiredIdentityFields"</span>: [],
   <span class="code-property">"implementation"</span>: {
@@ -1285,12 +1285,12 @@
   <span class="code-property">category</span>: <span class="code-string">"payment-network"</span>,
   <span class="code-property">version</span>: <span class="code-number">1</span>,
   <span class="code-property">produces</span>: [
-    <span class="code-string">"paymentsMonthlyVolumeMyrT3"</span>,
-    <span class="code-string">"paymentsMonthlyVolumeMyrT12"</span>,
-    <span class="code-string">"paymentsArpuStability12m"</span>,
-    <span class="code-string">"paymentsDisputeRate12m"</span>,
-    <span class="code-string">"paymentsCustomerConcentrationTop5Pct"</span>,
-    <span class="code-string">"paymentsActiveTenureMonths"</span>
+    <span class="code-string">"monthlyVolume3m"</span>,
+    <span class="code-string">"monthlyVolume12m"</span>,
+    <span class="code-string">"arpuStability12m"</span>,
+    <span class="code-string">"disputeRate12m"</span>,
+    <span class="code-string">"customerConcentrationTop5Pct"</span>,
+    <span class="code-string">"activeTenureMonths"</span>
   ],
 
   <span class="code-keyword">async</span> <span class="code-function">fetch</span>(identity) {
@@ -1318,12 +1318,12 @@
       <span class="code-property">instanceKey</span>: <span class="code-string">"default"</span>,
       <span class="code-property">observedAt</span>: <span class="code-keyword">new</span> <span class="code-function">Date</span>().toISOString(),
       <span class="code-property">values</span>: {
-        <span class="code-property">paymentsMonthlyVolumeMyrT3</span>: Number(metrics.monthlyVolumeMyrT3 ?? <span class="code-number">0</span>),
-        <span class="code-property">paymentsMonthlyVolumeMyrT12</span>: Number(metrics.monthlyVolumeMyrT12 ?? <span class="code-number">0</span>),
-        <span class="code-property">paymentsArpuStability12m</span>: Number(metrics.arpuStability12m ?? <span class="code-number">0</span>),
-        <span class="code-property">paymentsDisputeRate12m</span>: Number(metrics.disputeRate12m ?? <span class="code-number">0</span>),
-        <span class="code-property">paymentsCustomerConcentrationTop5Pct</span>: Number(metrics.customerConcentrationTop5Pct ?? <span class="code-number">0</span>),
-        <span class="code-property">paymentsActiveTenureMonths</span>: Number(metrics.activeTenureMonths ?? <span class="code-number">0</span>)
+        <span class="code-property">monthlyVolume3m</span>: Number(metrics.monthlyVolumeMyrT3 ?? <span class="code-number">0</span>),
+        <span class="code-property">monthlyVolume12m</span>: Number(metrics.monthlyVolumeMyrT12 ?? <span class="code-number">0</span>),
+        <span class="code-property">arpuStability12m</span>: Number(metrics.arpuStability12m ?? <span class="code-number">0</span>),
+        <span class="code-property">disputeRate12m</span>: Number(metrics.disputeRate12m ?? <span class="code-number">0</span>),
+        <span class="code-property">customerConcentrationTop5Pct</span>: Number(metrics.customerConcentrationTop5Pct ?? <span class="code-number">0</span>),
+        <span class="code-property">activeTenureMonths</span>: Number(metrics.activeTenureMonths ?? <span class="code-number">0</span>)
       }
     }];
   }
@@ -1352,8 +1352,8 @@
       {
         <span class="code-property">instanceKey</span>: <span class="code-string">"default"</span>,
         <span class="code-property">values</span>: {
-          <span class="code-property">paymentsActiveTenureMonths</span>: <span class="code-number">38</span>,
-          <span class="code-property">paymentsMonthlyVolumeMyrT3</span>: <span class="code-number">285000</span>
+          <span class="code-property">activeTenureMonths</span>: <span class="code-number">38</span>,
+          <span class="code-property">monthlyVolume3m</span>: <span class="code-number">285000</span>
         }
       }
     ]
@@ -1559,12 +1559,12 @@ Attaching API endpoint to localhost:4200</span>
           instanceKey: "default",
           observedAt: new Date().toISOString(),
           values: {
-            paymentsMonthlyVolumeMyrT3: vol3,
-            paymentsMonthlyVolumeMyrT12: vol12,
-            paymentsArpuStability12m: stability,
-            paymentsDisputeRate12m: dispute,
-            paymentsCustomerConcentrationTop5Pct: concentration,
-            paymentsActiveTenureMonths: tenure
+            monthlyVolume3m: vol3,
+            monthlyVolume12m: vol12,
+            arpuStability12m: stability,
+            disputeRate12m: dispute,
+            customerConcentrationTop5Pct: concentration,
+            activeTenureMonths: tenure
           }
         }
       ];

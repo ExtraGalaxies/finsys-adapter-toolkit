@@ -1108,49 +1108,49 @@
           </thead>
           <tbody>
             <tr>
-              <td><span class="field-name">socialAccountTenureMonths</span></td>
+              <td><span class="field-name">accountTenureMonths</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">months [0 - 600]</span></td>
               <td>Age of oldest verified public profile. Proxy for merchant business continuity.</td>
             </tr>
             <tr>
-              <td><span class="field-name">socialFollowerCount</span></td>
+              <td><span class="field-name">followerCount</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">count [0 - 100000000]</span></td>
               <td>Aggregate audience size. Checked alongside engagement to verify audience authenticity.</td>
             </tr>
             <tr>
-              <td><span class="field-name">socialEngagementRate90d</span></td>
+              <td><span class="field-name">engagementRate90d</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">ratio [0.0 - 1.0]</span></td>
               <td>Average interactions per impression. Near-zero values flag bot-boosted accounts.</td>
             </tr>
             <tr>
-              <td><span class="field-name">socialPostingConsistency12m</span></td>
+              <td><span class="field-name">postingConsistency12m</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">ratio [0.0 - 1.0]</span></td>
               <td>Fraction of months with active posting. Distinguishes active companies from dormant profiles.</td>
             </tr>
             <tr>
-              <td><span class="field-name">socialVerifiedBusinessAccount</span></td>
+              <td><span class="field-name">verifiedBusinessAccount</span></td>
               <td><span class="field-type">boolean</span></td>
               <td><span class="field-unit">true / false</span></td>
               <td>Platform verification status. Confirms independent platform business verification.</td>
             </tr>
             <tr>
-              <td><span class="field-name">socialCustomerRatingAvg</span></td>
+              <td><span class="field-name">customerRatingAvg</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">rating [0.0 - 5.0]</span></td>
               <td>Average customer review rating. Strong indicator for consumer-facing businesses.</td>
             </tr>
             <tr>
-              <td><span class="field-name">socialNegativeSentimentRatio90d</span></td>
+              <td><span class="field-name">negativeSentimentRatio90d</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">ratio [0.0 - 1.0]</span></td>
               <td>Fraction of negative public mentions. Elevated rates signal customer delivery issues.</td>
             </tr>
             <tr>
-              <td><span class="field-name">socialAccountFlags24m</span></td>
+              <td><span class="field-name">accountFlags24m</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">count [0 - 100]</span></td>
               <td>Count of platform strikes/suspensions. Values &ge;2 flag high risk.</td>
@@ -1305,14 +1305,14 @@
   <span class="code-property">"category"</span>: <span class="code-string">"social-media"</span>,
   <span class="code-property">"version"</span>: <span class="code-number">1</span>,
   <span class="code-property">"produces"</span>: [
-    <span class="code-string">"socialAccountTenureMonths"</span>,
-    <span class="code-string">"socialFollowerCount"</span>,
-    <span class="code-string">"socialEngagementRate90d"</span>,
-    <span class="code-string">"socialPostingConsistency12m"</span>,
-    <span class="code-string">"socialVerifiedBusinessAccount"</span>,
-    <span class="code-string">"socialCustomerRatingAvg"</span>,
-    <span class="code-string">"socialNegativeSentimentRatio90d"</span>,
-    <span class="code-string">"socialAccountFlags24m"</span>
+    <span class="code-string">"accountTenureMonths"</span>,
+    <span class="code-string">"followerCount"</span>,
+    <span class="code-string">"engagementRate90d"</span>,
+    <span class="code-string">"postingConsistency12m"</span>,
+    <span class="code-string">"verifiedBusinessAccount"</span>,
+    <span class="code-string">"customerRatingAvg"</span>,
+    <span class="code-string">"negativeSentimentRatio90d"</span>,
+    <span class="code-string">"accountFlags24m"</span>
   ],
   <span class="code-property">"requiredIdentityFields"</span>: [],
   <span class="code-property">"implementation"</span>: {
@@ -1343,14 +1343,14 @@
   <span class="code-property">category</span>: <span class="code-string">"social-media"</span>,
   <span class="code-property">version</span>: <span class="code-number">1</span>,
   <span class="code-property">produces</span>: [
-    <span class="code-string">"socialAccountTenureMonths"</span>,
-    <span class="code-string">"socialFollowerCount"</span>,
-    <span class="code-string">"socialEngagementRate90d"</span>,
-    <span class="code-string">"socialPostingConsistency12m"</span>,
-    <span class="code-string">"socialVerifiedBusinessAccount"</span>,
-    <span class="code-string">"socialCustomerRatingAvg"</span>,
-    <span class="code-string">"socialNegativeSentimentRatio90d"</span>,
-    <span class="code-string">"socialAccountFlags24m"</span>
+    <span class="code-string">"accountTenureMonths"</span>,
+    <span class="code-string">"followerCount"</span>,
+    <span class="code-string">"engagementRate90d"</span>,
+    <span class="code-string">"postingConsistency12m"</span>,
+    <span class="code-string">"verifiedBusinessAccount"</span>,
+    <span class="code-string">"customerRatingAvg"</span>,
+    <span class="code-string">"negativeSentimentRatio90d"</span>,
+    <span class="code-string">"accountFlags24m"</span>
   ],
 
   <span class="code-keyword">async</span> <span class="code-function">fetch</span>(identity) {
@@ -1378,17 +1378,17 @@
       <span class="code-property">instanceKey</span>: <span class="code-string">"default"</span>,
       <span class="code-property">observedAt</span>: <span class="code-keyword">new</span> <span class="code-function">Date</span>().toISOString(),
       <span class="code-property">values</span>: {
-        <span class="code-property">socialAccountTenureMonths</span>: Number(profile.accountAgeMonths ?? <span class="code-number">0</span>),
-        <span class="code-property">socialFollowerCount</span>: Number(profile.followers ?? <span class="code-number">0</span>),
-        <span class="code-property">socialEngagementRate90d</span>: round4(Number(raw.engagement90d?.engagementRate ?? <span class="code-number">0</span>)),
-        <span class="code-property">socialPostingConsistency12m</span>: clamp01(ratio(Number(posting.activeMonths ?? <span class="code-number">0</span>), <span class="code-number">12</span>)),
-        <span class="code-property">socialVerifiedBusinessAccount</span>: Boolean(profile.verified),
-        <span class="code-property">socialCustomerRatingAvg</span>: round4(Number(raw.reviews?.avgRating ?? <span class="code-number">0</span>)),
-        <span class="code-property">socialNegativeSentimentRatio90d</span>: ratio(
+        <span class="code-property">accountTenureMonths</span>: Number(profile.accountAgeMonths ?? <span class="code-number">0</span>),
+        <span class="code-property">followerCount</span>: Number(profile.followers ?? <span class="code-number">0</span>),
+        <span class="code-property">engagementRate90d</span>: round4(Number(raw.engagement90d?.engagementRate ?? <span class="code-number">0</span>)),
+        <span class="code-property">postingConsistency12m</span>: clamp01(ratio(Number(posting.activeMonths ?? <span class="code-number">0</span>), <span class="code-number">12</span>)),
+        <span class="code-property">verifiedBusinessAccount</span>: Boolean(profile.verified),
+        <span class="code-property">customerRatingAvg</span>: round4(Number(raw.reviews?.avgRating ?? <span class="code-number">0</span>)),
+        <span class="code-property">negativeSentimentRatio90d</span>: ratio(
           Number(sentiment.negativeMentions ?? <span class="code-number">0</span>),
           Number(sentiment.totalMentions ?? <span class="code-number">0</span>)
         ),
-        <span class="code-property">socialAccountFlags24m</span>: Number(raw.flags24m?.count ?? <span class="code-number">0</span>)
+        <span class="code-property">accountFlags24m</span>: Number(raw.flags24m?.count ?? <span class="code-number">0</span>)
       }
     }];
   }
@@ -1417,8 +1417,8 @@
       {
         <span class="code-property">instanceKey</span>: <span class="code-string">"default"</span>,
         <span class="code-property">values</span>: {
-          <span class="code-property">socialFollowerCount</span>: <span class="code-number">18500</span>,
-          <span class="code-property">socialVerifiedBusinessAccount</span>: <span class="code-keyword">true</span>
+          <span class="code-property">followerCount</span>: <span class="code-number">18500</span>,
+          <span class="code-property">verifiedBusinessAccount</span>: <span class="code-keyword">true</span>
         }
       }
     ]
@@ -1655,14 +1655,14 @@ Attaching API endpoint to localhost:4400</span>
           instanceKey: "default",
           observedAt: new Date().toISOString(),
           values: {
-            socialAccountTenureMonths: age,
-            socialFollowerCount: followers,
-            socialEngagementRate90d: engagement,
-            socialPostingConsistency12m: clamp01(ratio(activeMonths, 12)),
-            socialVerifiedBusinessAccount: verified,
-            socialCustomerRatingAvg: rating,
-            socialNegativeSentimentRatio90d: ratio(neg, total),
-            socialAccountFlags24m: flags
+            accountTenureMonths: age,
+            followerCount: followers,
+            engagementRate90d: engagement,
+            postingConsistency12m: clamp01(ratio(activeMonths, 12)),
+            verifiedBusinessAccount: verified,
+            customerRatingAvg: rating,
+            negativeSentimentRatio90d: ratio(neg, total),
+            accountFlags24m: flags
           }
         }
       ];

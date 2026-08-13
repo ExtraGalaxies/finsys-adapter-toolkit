@@ -5,7 +5,13 @@
   "category": "telco-carrier",
   "version": 1,
   "cardinality": "single",
-  "produces": ["telcoOnTimePaymentRatio24m", "telcoTenureMonths"],
+  "produces": [
+    "onTimePaymentRatio24m",
+    "tenureMonths"
+  ],
   "requiredIdentityFields": [],
-  "implementation": { "type": "typescript", "entryPoint": "extract.mjs" }
+  "implementation": {
+    "type": "typescript",
+    "entryPoint": "extract.mjs"
+  }
 }

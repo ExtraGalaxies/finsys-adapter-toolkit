@@ -102,7 +102,7 @@ const fixtures = [
       {
         instanceKey: "default",
         observedAt: "2026-01-01T00:00:00.000Z",
-        values: { telcoOnTimePaymentRatio24m: 1.0 /* ... */ },
+        values: { onTimePaymentRatio24m: 1.0 /* ... */ },
       },
     ],
   },

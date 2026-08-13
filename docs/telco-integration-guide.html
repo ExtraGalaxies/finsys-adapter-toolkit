@@ -1114,43 +1114,43 @@
           </thead>
           <tbody>
             <tr>
-              <td><span class="field-name">telcoOnTimePaymentRatio24m</span></td>
+              <td><span class="field-name">onTimePaymentRatio24m</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">ratio [0.0 - 1.0]</span></td>
               <td>Fraction of bills paid on time over the last 24 months. Primary risk predictor. Values &ge;0.95 signal strong history.</td>
             </tr>
             <tr>
-              <td><span class="field-name">telcoTenureMonths</span></td>
+              <td><span class="field-name">tenureMonths</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">months [0 - 600]</span></td>
               <td>Account age in months. Values &ge;48 months trigger scoring boosts to offset thin formal credit files.</td>
             </tr>
             <tr>
-              <td><span class="field-name">telcoSuspensionsCount24m</span></td>
+              <td><span class="field-name">suspensionsCount24m</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">count [0 - 100]</span></td>
               <td>Number of suspensions triggered by non-payment in the last 24 months. Values &ge;3 flag potential financial distress.</td>
             </tr>
             <tr>
-              <td><span class="field-name">telcoLateDays24m</span></td>
+              <td><span class="field-name">lateDays24m</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">days [0 - 800]</span></td>
               <td>Cumulative count of days overdue across all bill cycles in the trailing 24-month window.</td>
             </tr>
             <tr>
-              <td><span class="field-name">telcoArpuMyr</span></td>
+              <td><span class="field-name">arpu</span></td>
               <td><span class="field-type">number</span></td>
               <td><span class="field-unit">MYR [0 - 10000]</span></td>
               <td>Average monthly bill revenue (RM). Acts as a proxy for consumer disposable spending capacity.</td>
             </tr>
             <tr>
-              <td><span class="field-name">telcoHandsetFinancingActive</span></td>
+              <td><span class="field-name">handsetFinancingActive</span></td>
               <td><span class="field-type">boolean</span></td>
               <td><span class="field-unit">true / false</span></td>
               <td>Indicates whether the user has an active handset installment payment plan (device EMI active).</td>
             </tr>
             <tr>
-              <td><span class="field-name">telcoHandsetFinancingDelinquent</span></td>
+              <td><span class="field-name">handsetFinancingDelinquent</span></td>
               <td><span class="field-type">boolean</span></td>
               <td><span class="field-unit">true / false</span></td>
               <td>Indicates if there is an active device payment default. Flags high risk even if standard service bills are paid.</td>
@@ -1299,13 +1299,13 @@
   <span class="code-property">"category"</span>: <span class="code-string">"telco-carrier"</span>,
   <span class="code-property">"version"</span>: <span class="code-number">1</span>,
   <span class="code-property">"produces"</span>: [
-    <span class="code-string">"telcoTenureMonths"</span>,
-    <span class="code-string">"telcoOnTimePaymentRatio24m"</span>,
-    <span class="code-string">"telcoLateDays24m"</span>,
-    <span class="code-string">"telcoSuspensionsCount24m"</span>,
-    <span class="code-string">"telcoArpuMyr"</span>,
-    <span class="code-string">"telcoHandsetFinancingActive"</span>,
-    <span class="code-string">"telcoHandsetFinancingDelinquent"</span>
+    <span class="code-string">"tenureMonths"</span>,
+    <span class="code-string">"onTimePaymentRatio24m"</span>,
+    <span class="code-string">"lateDays24m"</span>,
+    <span class="code-string">"suspensionsCount24m"</span>,
+    <span class="code-string">"arpu"</span>,
+    <span class="code-string">"handsetFinancingActive"</span>,
+    <span class="code-string">"handsetFinancingDelinquent"</span>
   ],
   <span class="code-property">"requiredIdentityFields"</span>: [],
   <span class="code-property">"implementation"</span>: {
@@ -1332,13 +1332,13 @@
   <span class="code-property">category</span>: <span class="code-string">"telco-carrier"</span>,
   <span class="code-property">version</span>: <span class="code-number">1</span>,
   <span class="code-property">produces</span>: [
-    <span class="code-string">"telcoTenureMonths"</span>,
-    <span class="code-string">"telcoOnTimePaymentRatio24m"</span>,
-    <span class="code-string">"telcoLateDays24m"</span>,
-    <span class="code-string">"telcoSuspensionsCount24m"</span>,
-    <span class="code-string">"telcoArpuMyr"</span>,
-    <span class="code-string">"telcoHandsetFinancingActive"</span>,
-    <span class="code-string">"telcoHandsetFinancingDelinquent"</span>
+    <span class="code-string">"tenureMonths"</span>,
+    <span class="code-string">"onTimePaymentRatio24m"</span>,
+    <span class="code-string">"lateDays24m"</span>,
+    <span class="code-string">"suspensionsCount24m"</span>,
+    <span class="code-string">"arpu"</span>,
+    <span class="code-string">"handsetFinancingActive"</span>,
+    <span class="code-string">"handsetFinancingDelinquent"</span>
   ],
 
   <span class="code-keyword">async</span> <span class="code-function">fetch</span>(identity) {
@@ -1382,13 +1382,13 @@
       <span class="code-property">instanceKey</span>: <span class="code-string">"default"</span>,
       <span class="code-property">observedAt</span>: <span class="code-keyword">new</span> <span class="code-function">Date</span>().toISOString(),
       <span class="code-property">values</span>: {
-        <span class="code-property">telcoTenureMonths</span>: tenureMonths,
-        <span class="code-property">telcoOnTimePaymentRatio24m</span>: onTimeRatio,
-        <span class="code-property">telcoLateDays24m</span>: lateDays,
-        <span class="code-property">telcoSuspensionsCount24m</span>: suspensions,
-        <span class="code-property">telcoArpuMyr</span>: Number(raw.averageMonthlyArpuMyr ?? <span class="code-number">0</span>),
-        <span class="code-property">telcoHandsetFinancingActive</span>: handsetActive,
-        <span class="code-property">telcoHandsetFinancingDelinquent</span>: handsetDelinquent
+        <span class="code-property">tenureMonths</span>: tenureMonths,
+        <span class="code-property">onTimePaymentRatio24m</span>: onTimeRatio,
+        <span class="code-property">lateDays24m</span>: lateDays,
+        <span class="code-property">suspensionsCount24m</span>: suspensions,
+        <span class="code-property">arpu</span>: Number(raw.averageMonthlyArpuMyr ?? <span class="code-number">0</span>),
+        <span class="code-property">handsetFinancingActive</span>: handsetActive,
+        <span class="code-property">handsetFinancingDelinquent</span>: handsetDelinquent
       }
     }];
   }
@@ -1417,8 +1417,8 @@
       {
         <span class="code-property">instanceKey</span>: <span class="code-string">"default"</span>,
         <span class="code-property">values</span>: {
-          <span class="code-property">telcoOnTimePaymentRatio24m</span>: <span class="code-number">1.0</span>,
-          <span class="code-property">telcoSuspensionsCount24m</span>: <span class="code-number">0</span>
+          <span class="code-property">onTimePaymentRatio24m</span>: <span class="code-number">1.0</span>,
+          <span class="code-property">suspensionsCount24m</span>: <span class="code-number">0</span>
         }
       }
     ]
@@ -1669,13 +1669,13 @@ Sending mock subscriber ping check: HTTP 200 OK</span>
           instanceKey: "default",
           observedAt: new Date().toISOString(),
           values: {
-            telcoTenureMonths: tenureMonths,
-            telcoOnTimePaymentRatio24m: onTimeRatio,
-            telcoLateDays24m: lateDays,
-            telcoSuspensionsCount24m: calculatedSuspensions,
-            telcoArpuMyr: arpu,
-            telcoHandsetFinancingActive: deviceActive,
-            telcoHandsetFinancingDelinquent: deviceActive ? deviceDelinquent : false
+            tenureMonths: tenureMonths,
+            onTimePaymentRatio24m: onTimeRatio,
+            lateDays24m: lateDays,
+            suspensionsCount24m: calculatedSuspensions,
+            arpu: arpu,
+            handsetFinancingActive: deviceActive,
+            handsetFinancingDelinquent: deviceActive ? deviceDelinquent : false
           }
         }
       ];
