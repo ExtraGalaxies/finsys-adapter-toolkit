@@ -4,6 +4,56 @@ All notable changes to `@finsys/adapter-toolkit` are documented here.
 Versions publish to npm on a **GitHub Release** (not on merge to main) —
 cutting a release tag is the explicit cutover.
 
+## 0.2.1
+
+Fixes two defects in 0.2.0, both found before either version reached npm.
+
+**The peer range excluded the core that shipped.** 0.2.0 declared
+`@finsys/core` as `>=6.0.1 <7` while core was at 6.0.2; core then released
+7.0.0, so installing the pair would have produced an unsatisfiable peer — the
+exact install-time breakage the peerDependency move existed to end. Widened to
+`>=6.0.1 <8`, justified by diffing published 6.0.2's `adapter-categories.json`
+against 7.0.0's: byte-identical, because 7.0.0 is a types-only major. So
+`categoryFieldsOf()` returns the same set under either.
+
+**The core-version guard could never have fired.** It read
+`@finsys/core/package.json`, which Node blocks — core's `exports` map does not
+declare that subpath — so the lookup threw, the catch swallowed it, and the
+check returned early on every call. A guard written to make a version skew
+loud, silently doing nothing. It now resolves the module entry and walks up to
+the owning `package.json`, verifying `name` so a walk out of a nested install
+cannot report the consumer's own version as core's. "Could not determine" now
+warns rather than returning quietly, because that is a different fact from
+"it is fine".
+
+## 0.2.0
+
+**`@finsys/core` is now a peerDependency**, not a dependency. It was pinned
+`^4.8.0`, which cannot accept 5.x or 6.x, so npm NESTED a second copy: a
+partner installing both got their own core at the current major and this
+toolkit's at 4.x. `validateAdapter` then checked their manifest against a
+two-major-old vocabulary — rejecting a correct field name, accepting a retired
+one, and never saying two registries were in play. A peer range makes nesting
+impossible.
+
+**Every published example moved to the current vocabulary.** All five taught
+names that SYS-3333 retired, so a partner copying the reference example started
+deprecated on day one. Rewritten from core's own `legacyName` table: 33 renames
+across the manifests, then the extract code and fixtures that EMIT those names,
+then the README, the four HTML integration guides and `docs/canonical-fields.md`.
+
+**`minimal-adapter-template` now DERIVES its vocabulary.** Zero of the five
+examples derived a field name from core; all were literals, so the blueprint
+taught restatement — the habit that makes a rename expensive. The template's
+test now asserts `manifest.produces` against `categoryFieldsOf(manifest.category)`
+before any fixture runs, so a retired name fails on the partner's own machine
+with the field named. It is the file most partners copy, which is why it is the
+one that had to change.
+
+## 0.1.3
+
+Ships adapter cardinality declarations in the reference examples.
+
 ## 0.1.2
 
 Republished so the shipped artifacts match the anonymized source. No API
