@@ -18,12 +18,12 @@ const adapter = {
   category: "payment-network",
   version: 1,
   produces: [
-    "paymentsMonthlyVolumeMyrT3",
-    "paymentsMonthlyVolumeMyrT12",
-    "paymentsArpuStability12m",
-    "paymentsDisputeRate12m",
-    "paymentsCustomerConcentrationTop5Pct",
-    "paymentsActiveTenureMonths",
+    "monthlyVolume3m",
+    "monthlyVolume12m",
+    "arpuStability12m",
+    "disputeRate12m",
+    "customerConcentrationTop5Pct",
+    "activeTenureMonths",
   ],
 
   async fetch(identity) {
@@ -52,12 +52,12 @@ const adapter = {
         instanceKey: "default",
         observedAt: new Date().toISOString(),
         values: {
-          paymentsMonthlyVolumeMyrT3: Number(metrics.monthlyVolumeMyrT3 ?? 0),
-          paymentsMonthlyVolumeMyrT12: Number(metrics.monthlyVolumeMyrT12 ?? 0),
-          paymentsArpuStability12m: Number(metrics.arpuStability12m ?? 0),
-          paymentsDisputeRate12m: Number(metrics.disputeRate12m ?? 0),
-          paymentsCustomerConcentrationTop5Pct: Number(metrics.customerConcentrationTop5Pct ?? 0),
-          paymentsActiveTenureMonths: Number(metrics.activeTenureMonths ?? 0),
+          monthlyVolume3m: Number(metrics.monthlyVolumeMyrT3 ?? 0),
+          monthlyVolume12m: Number(metrics.monthlyVolumeMyrT12 ?? 0),
+          arpuStability12m: Number(metrics.arpuStability12m ?? 0),
+          disputeRate12m: Number(metrics.disputeRate12m ?? 0),
+          customerConcentrationTop5Pct: Number(metrics.customerConcentrationTop5Pct ?? 0),
+          activeTenureMonths: Number(metrics.activeTenureMonths ?? 0),
         },
       },
     ]

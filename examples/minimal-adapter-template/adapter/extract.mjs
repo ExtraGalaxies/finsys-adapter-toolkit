@@ -17,7 +17,7 @@ const adapter = {
   category: "telco-carrier",
   version: 1,
   // The canonical fields you emit — MUST be a subset of the category's fields.
-  produces: ["telcoOnTimePaymentRatio24m", "telcoTenureMonths"],
+  produces: ["onTimePaymentRatio24m", "tenureMonths"],
 
   // OPTIONAL per-applicant pull from your source. Delete this whole method if
   // your data reaches extract() another way (then `requiredIdentityFields`
@@ -42,8 +42,8 @@ const adapter = {
         instanceKey: "", // "" for single-instance; a stable per-instance id otherwise
         observedAt: new Date().toISOString(), // when your data was observed
         values: {
-          telcoOnTimePaymentRatio24m: Number(r.onTimeRatio ?? 0),
-          telcoTenureMonths: Number(r.tenureMonths ?? 0),
+          onTimePaymentRatio24m: Number(r.onTimeRatio ?? 0),
+          tenureMonths: Number(r.tenureMonths ?? 0),
         },
       },
     ]

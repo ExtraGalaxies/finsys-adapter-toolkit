@@ -42,8 +42,8 @@ export const adapter: SourceAdapter = {
   category: "telco-carrier",    // ONE category (see canonical-fields.md)
   version: 1,
   produces: [                    // subset of the category's canonical fields
-    "telcoOnTimePaymentRatio24m",
-    "telcoTenureMonths",
+    "onTimePaymentRatio24m",
+    "tenureMonths",
   ],
 
   // Optional: pull data for one applicant from your source. Omit if your
@@ -63,8 +63,8 @@ export const adapter: SourceAdapter = {
       instanceKey: "",                       // "" for single-instance; else a stable per-instance id
       observedAt: new Date().toISOString(),  // when your data was observed
       values: {
-        telcoOnTimePaymentRatio24m: r.onTime,
-        telcoTenureMonths: r.ageMonths,
+        onTimePaymentRatio24m: r.onTime,
+        tenureMonths: r.ageMonths,
       },
     }]
   },
@@ -111,7 +111,7 @@ Ship a `manifest.json` next to your adapter:
   "displayName": "Acme Telco",
   "category": "telco-carrier",
   "version": 1,
-  "produces": ["telcoOnTimePaymentRatio24m", "telcoTenureMonths"],
+  "produces": ["onTimePaymentRatio24m", "tenureMonths"],
   "requiredIdentityFields": [],         // e.g. ["ic"] if fetch() needs the IC; never list ihsId/fullName
   "implementation": { "type": "typescript", "entryPoint": "extract.mjs" }
 }

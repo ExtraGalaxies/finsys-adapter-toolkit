@@ -11,6 +11,11 @@
 export { validateAdapter, type ValidateAdapterResult } from "./validateAdapter.js"
 export { runFixtures, type FixtureResult, type Fixture } from "./runFixtures.js"
 export { MockConsumer } from "./MockConsumer.js"
+export {
+  assertSupportedCore,
+  resolvedCoreVersion,
+  SUPPORTED_CORE_MAJORS,
+} from "./coreVersionGuard.js"
 
 // SYS-2554: re-export the Source Adapter contract from @finsys/core so an
 // integrator gets the full type + helper surface from ONE import
