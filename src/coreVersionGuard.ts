@@ -1,4 +1,7 @@
 import { createRequire } from "node:module"
+import { readFileSync } from "node:fs"
+import { dirname, join, parse } from "node:path"
+import { fileURLToPath } from "node:url"
 
 /**
  * SYS-3346 — refuse to validate silently against a core the toolkit does not
@@ -28,17 +31,60 @@ import { createRequire } from "node:module"
 
 const require_ = createRequire(import.meta.url)
 
-/** The core majors this toolkit's validation logic is written against. */
-export const SUPPORTED_CORE_MAJORS = [6] as const
+/**
+ * The core majors this toolkit's validation logic is written against.
+ *
+ * BOTH 6 and 7, and that is a statement about the DATA rather than a
+ * convenience. Core 7.0.0 is a types-only major: it replaced the loose
+ * `string` vocabulary aliases with generated literal unions and changed no
+ * field, no category and no schema. Verified by unpacking published 6.0.2 and
+ * diffing its adapter-categories.json against 7.0.0's — byte-identical.
+ *
+ * So `categoryFieldsOf()` returns the same set under either, and refusing 7
+ * would reject a core this toolkit validates perfectly well against. Drop 6
+ * from this list only when a 7.x release actually changes the vocabulary.
+ */
+export const SUPPORTED_CORE_MAJORS = [6, 7] as const
 
-/** The version of `@finsys/core` this process actually resolved, or null. */
+/**
+ * The version of `@finsys/core` this process actually resolved, or null.
+ *
+ * Resolves the module ENTRY and walks up to the owning package.json, rather
+ * than requiring "@finsys/core/package.json" directly. The direct form is the
+ * obvious one and it does not work: core's `exports` map declares only ".",
+ * "./schema" and "./schema/adapter-manifest", and Node enforces that map — so
+ * the subpath throws ERR_PACKAGE_PATH_NOT_EXPORTED.
+ *
+ * That is not hypothetical. The first version of this guard used the direct
+ * require, swallowed the throw, returned null, and `assertSupportedCore` then
+ * returned early on every call. It was inert: a guard written to make a
+ * version skew loud that could not have fired once. Caught by printing
+ * `resolvedCoreVersion()` while proving the toolkit against core 7 — it said
+ * `null` where it should have said `7.0.0`.
+ */
 export function resolvedCoreVersion(): string | null {
   try {
-    const pkg = require_("@finsys/core/package.json") as { version?: string }
-    return typeof pkg.version === "string" ? pkg.version : null
+    let dir = dirname(require_.resolve("@finsys/core"))
+    const { root } = parse(dir)
+    // Bounded walk: dist/ -> package root is one hop, but a different build
+    // layout could nest deeper, and an unbounded loop on a symlink cycle is
+    // worse than giving up.
+    for (let i = 0; i < 8 && dir !== root; i++) {
+      try {
+        const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8")) as {
+          name?: string
+          version?: string
+        }
+        // Check the NAME too: walking up out of a nested install would
+        // otherwise report the consumer's own version as core's.
+        if (pkg.name === "@finsys/core" && typeof pkg.version === "string") return pkg.version
+      } catch {
+        // no package.json at this level, or unreadable — keep walking
+      }
+      dir = dirname(dir)
+    }
+    return null
   } catch {
-    // Not resolvable as a subpath export on every core line. Unknown is not
-    // the same as wrong, so this stays quiet rather than crying wolf.
     return null
   }
 }
@@ -56,7 +102,17 @@ let warned = false
 export function assertSupportedCore(): void {
   if (warned) return
   const version = resolvedCoreVersion()
-  if (version === null) return
+  if (version === null) {
+    // "I could not check" is a different fact from "it is fine", and the whole
+    // point of this module is that a skew must never be silent. Said once.
+    warned = true
+    console.warn(
+      `[@finsys/adapter-toolkit] could not determine the resolved @finsys/core version, so ` +
+        `the supported-major check did not run. Manifests are still validated, but against a ` +
+        `vocabulary whose provenance is unverified.`
+    )
+    return
+  }
   const major = Number(version.split(".")[0])
   if (!Number.isFinite(major)) return
   if ((SUPPORTED_CORE_MAJORS as readonly number[]).includes(major)) return
