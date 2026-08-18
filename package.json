@@ -1,7 +1,7 @@
 {
   "name": "@finsys/adapter-toolkit",
-  "version": "0.2.1",
-  "description": "Partner SDK for the FinSys Source Adapter Framework — manifest validator, fixture harness, mock consumer, and reference examples for adapter authors.",
+  "version": "0.2.2",
+  "description": "Partner SDK for the FinSys Source Adapter Framework \u2014 manifest validator, fixture harness, mock consumer, and reference examples for adapter authors.",
   "license": "Apache-2.0",
   "type": "module",
   "main": "dist/index.js",
@@ -37,7 +37,7 @@
     "ajv": "^8.20.0"
   },
   "peerDependencies": {
-    "@finsys/core": ">=6.0.1 <8"
+    "@finsys/core": ">=6.0.1 <9"
   },
   "devDependencies": {
     "@finsys/core": "^6.0.2",
