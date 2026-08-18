@@ -4,6 +4,28 @@ All notable changes to `@finsys/adapter-toolkit` are documented here.
 Versions publish to npm on a **GitHub Release** (not on merge to main) —
 cutting a release tag is the explicit cutover.
 
+## 0.2.2
+
+**Admits `@finsys/core` 8.** Peer range `>=6.0.1 <8` → `>=6.0.1 <9`, and
+`SUPPORTED_CORE_MAJORS` `[6, 7]` → `[6, 7, 8]`. Released **before** core 8.0.0
+on purpose: this range still admits 7.x, so it is installable today, and once
+8.0.0 becomes `latest` there is no window in which `npm install
+@finsys/adapter-toolkit @finsys/core` resolves to a pair that cannot co-install.
+
+Justified the same way 0.2.1 justified admitting 7: core 8.0.0's only breaking
+change is the removal of five `survey-core` type re-exports (SYS-3420) —
+nothing this toolkit reads. Every file under `dist/data` and `dist/schema` in
+the 8.0.0 tarball is byte-identical to 7.10.0's, `adapter-categories.json`
+included, so `categoryFieldsOf()` returns the same set under either. Lint and
+the full suite pass against the 8.0.0 candidate as well as against 6.0.2.
+
+**New test: the peer range and `SUPPORTED_CORE_MAJORS` must agree.** They are
+one fact declared twice — the guard cannot read `package.json` at runtime
+through core's exports map, so it carries its own copy — and until now nothing
+compared them. The test parses the range (this repo's `>=A.B.C <N` shape only;
+any other shape fails closed) and asserts the guard lists exactly those majors.
+Observed red with the range at `<8` and the guard at `[6, 7, 8]`.
+
 ## 0.2.1
 
 Fixes two defects in 0.2.0, both found before either version reached npm.

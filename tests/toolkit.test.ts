@@ -3,7 +3,7 @@
 // artifacts a partner downloads — so `npm test` guards the contract the
 // README sells. Runs with no network and no FinHero stack.
 
-import { readdirSync, statSync, existsSync } from "node:fs"
+import { readdirSync, statSync, existsSync, readFileSync } from "node:fs"
 import { dirname, resolve } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
@@ -161,5 +161,28 @@ describe("MockConsumer", () => {
     const rows = consumer.getCanonicalRowsForIhs(7).telco
     expect(rows).toHaveLength(1)
     expect(rows[0]!.values.onTimePaymentRatio24m).toBe(0.8)
+  })
+})
+
+// SYS-3420 — the peer range and SUPPORTED_CORE_MAJORS are one fact declared
+// twice (package.json cannot be read at runtime through core's exports map, so
+// the guard carries its own copy). This holds them together: a range widened
+// without the guard, or the reverse, fails here. The range shape is this repo's
+// own convention (`>=A.B.C <N`); anything else fails CLOSED rather than being
+// half-parsed — the same posture as core's publish preflight.
+import { SUPPORTED_CORE_MAJORS } from "../src/coreVersionGuard.js"
+
+describe("core peer range ↔ SUPPORTED_CORE_MAJORS", () => {
+  it("declares exactly the majors the guard accepts", () => {
+    const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
+      peerDependencies: Record<string, string>
+    }
+    const range = pkg.peerDependencies["@finsys/core"]
+    const m = /^>=(\d+)\.\d+\.\d+ <(\d+)$/.exec(range)
+    if (!m) throw new Error(`peer range "${range}" is not of the form ">=A.B.C <N" — update this test deliberately, do not loosen it`)
+    const lo = Number(m[1])
+    const hiExclusive = Number(m[2])
+    const majorsInRange = Array.from({ length: hiExclusive - lo }, (_, i) => lo + i)
+    expect([...SUPPORTED_CORE_MAJORS]).toEqual(majorsInRange)
   })
 })

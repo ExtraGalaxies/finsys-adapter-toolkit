@@ -44,7 +44,11 @@ const require_ = createRequire(import.meta.url)
  * would reject a core this toolkit validates perfectly well against. Drop 6
  * from this list only when a 7.x release actually changes the vocabulary.
  */
-export const SUPPORTED_CORE_MAJORS = [6, 7] as const
+// Must agree with package.json's peerDependencies["@finsys/core"] — the two
+// are one fact declared twice, and tests/toolkit.test.ts holds them together.
+// 8: core 8.0.0 removed only its survey-core re-exports (SYS-3420); the
+// adapter vocabulary this toolkit reads is byte-identical to 7.10.0's.
+export const SUPPORTED_CORE_MAJORS = [6, 7, 8] as const
 
 /**
  * The version of `@finsys/core` this process actually resolved, or null.
