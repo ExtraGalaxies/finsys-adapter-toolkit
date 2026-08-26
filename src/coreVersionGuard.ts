@@ -48,7 +48,12 @@ const require_ = createRequire(import.meta.url)
 // are one fact declared twice, and tests/toolkit.test.ts holds them together.
 // 8: core 8.0.0 removed only its survey-core re-exports (SYS-3420); the
 // adapter vocabulary this toolkit reads is byte-identical to 7.10.0's.
-export const SUPPORTED_CORE_MAJORS = [6, 7, 8] as const
+// 9: core 9.0.0 reshapes the SUBJECT surface (SubjectSource, and the merge in
+// subjectViewFromRecords — SYS-3554/SYS-3464). This toolkit reads none of it.
+// Measured the same way 8 was, on the 9.0.0 candidate rather than assumed:
+// dist/data and dist/schema are byte-identical to published 8.1.2's, so
+// categoryFieldsOf() returns the same set under either (SYS-3555).
+export const SUPPORTED_CORE_MAJORS = [6, 7, 8, 9] as const
 
 /**
  * The version of `@finsys/core` this process actually resolved, or null.
