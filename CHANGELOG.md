@@ -4,6 +4,32 @@ All notable changes to `@finsys/adapter-toolkit` are documented here.
 Versions publish to npm on a **GitHub Release** (not on merge to main) —
 cutting a release tag is the explicit cutover.
 
+## 0.2.3
+
+**Admits `@finsys/core` 9.** Peer range `>=6.0.1 <9` → `>=6.0.1 <10`, and
+`SUPPORTED_CORE_MAJORS` `[6, 7, 8]` → `[6, 7, 8, 9]`. Released **before** core
+9.0.0 for the same reason 0.2.2 shipped before core 8.0.0: this range still
+admits 8.x, so it is installable today, and once 9.0.0 becomes `latest` there is
+no window in which `npm install @finsys/adapter-toolkit @finsys/core` resolves
+to a pair that cannot co-install. That window is not hypothetical — measured on
+the 9.0.0 candidate, `npm install @finsys/core@^9.0.0
+@finsys/adapter-toolkit@0.2.2` fails `ERESOLVE` on this peer.
+
+Justified the same way 0.2.2 justified admitting 8, and measured rather than
+assumed. Core 9.0.0's breaking changes are confined to the SUBJECT surface —
+`SubjectInstance.source` becomes the pair `(furnisherId, recordRef)`,
+`subjectViewFromRecords` stops reading `view.ihsId`, and a merged `instanceKey`
+is raw again (SYS-3554/SYS-3464). This toolkit references none of those names.
+Every file under `dist/data` and `dist/schema` in the 9.0.0 candidate tarball is
+byte-identical to published 8.1.2's, `adapter-categories.json` included, so
+`categoryFieldsOf()` returns the same set under either.
+
+**The devDependency moves `^6.0.2` → `^8.1.2`.** It had sat two majors below the
+ceiling the peer range advertised, so CI proved compatibility with a core well
+under the top of the declared range and nothing exercised that top. It now
+tracks the newest core on public npm; it moves again to 9.x once that version is
+cut, since a devDependency cannot name a version npm cannot install.
+
 ## 0.2.2
 
 **Admits `@finsys/core` 8.** Peer range `>=6.0.1 <8` → `>=6.0.1 <9`, and
