@@ -1,0 +1,13 @@
+node_modules
+.git
+build
+dist
+tmp
+coverage
+.cache
+.claude
+.worktrees
+.cursor
+.aider*
+.env
+.env.*
