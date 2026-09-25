@@ -17,8 +17,8 @@ export {
   SUPPORTED_CORE_MAJORS,
 } from "./coreVersionGuard.js"
 
-// SYS-2554: re-export the Source Adapter contract from @finsys/core so an
-// integrator gets the full type + helper surface from ONE import
+// Re-export the Source Adapter contract from @finsys/core so an integrator
+// gets the full type + helper surface from ONE import
 // (`@finsys/adapter-toolkit`) instead of also having to discover and depend
 // on @finsys/core directly to find the interfaces they implement against.
 export type {

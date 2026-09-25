@@ -13,10 +13,10 @@
 
 const API_URL = process.env.FAKE_TELCO_API_URL ?? "http://fake-telco-api:4100"
 const API_KEY = process.env.FAKE_TELCO_API_KEY ?? "demo-key"
-// DEVOPS-540 gate hook, hardening per QA review: the test-override marker
-// below is otherwise unconditional -- gating it behind an explicit env flag
-// means the shipped reference adapter can't honor it in any non-test mount,
-// only when a test harness deliberately opts in.
+// Gate hook: the test-override marker below is otherwise unconditional --
+// gating it behind an explicit env flag means the shipped reference adapter
+// can't honor it in any non-test mount, only when a test harness
+// deliberately opts in.
 const TEST_HOOKS_ENABLED = process.env.FAKE_TELCO_ENABLE_TEST_HOOKS === "1"
 
 const adapter = {
@@ -48,15 +48,15 @@ const adapter = {
     if (!identity?.ic || !identity?.fullName) {
       throw new Error("fake-telco-v1: identity.ic and identity.fullName are required")
     }
-    // DEVOPS-540 gate hook: a narrow, deliberate test-only override so the
-    // enum ingest gate's refusal paths (out-of-set label, non-string
-    // label) can be exercised through this REAL default-mounted reference
-    // adapter rather than a separate test-only fixture -- same "marker in
-    // fullName" convention as compose/fixtures/adapter-registry-enum's
-    // dedicated gate fixture. Gated behind FAKE_TELCO_ENABLE_TEST_HOOKS so
-    // the shipped adapter can't honor the marker in any non-test mount;
-    // every other identity (and every mount without the flag set) takes
-    // the normal upstream path below.
+    // Gate hook: a narrow, deliberate test-only override so the enum ingest
+    // gate's refusal paths (out-of-set label, non-string label) can be
+    // exercised through this REAL default-mounted reference adapter rather
+    // than a separate test-only fixture -- same "marker in fullName"
+    // convention as compose/fixtures/adapter-registry-enum's dedicated gate
+    // fixture. Gated behind FAKE_TELCO_ENABLE_TEST_HOOKS so the shipped
+    // adapter can't honor the marker in any non-test mount; every other
+    // identity (and every mount without the flag set) takes the normal
+    // upstream path below.
     if (TEST_HOOKS_ENABLED && identity.fullName.includes("FAKETELCO:DISTRESS_OOR")) {
       return { _enumTestOverride: "out-of-set" }
     }
@@ -79,9 +79,9 @@ const adapter = {
   },
 
   async extract(raw) {
-    // M1 hardening (PR #11 review): recognition of the override shape is
-    // gated too — with hooks off, the extract path is provably inert for
-    // ANY raw payload, even one that happens to carry this field name.
+    // Recognition of the override shape is gated too — with hooks off, the
+    // extract path is provably inert for ANY raw payload, even one that
+    // happens to carry this field name.
     if (TEST_HOOKS_ENABLED && raw._enumTestOverride === "out-of-set") {
       return [
         {

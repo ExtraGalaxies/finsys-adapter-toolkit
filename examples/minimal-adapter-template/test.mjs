@@ -9,14 +9,13 @@ import { categoryFieldsOf } from "@finsys/core"
 import { runFixtures } from "@finsys/adapter-toolkit"
 import adapter from "./adapter/extract.mjs"
 
-// ── SYS-3346: DERIVE the vocabulary, do not restate it ──────────────────────
+// ── DERIVE the vocabulary, do not restate it ────────────────────────────────
 //
 // This is the file most partners copy, so whatever it does is what most
-// adapters will do. It used to state field names as literals in three places
-// — manifest, extract, fixtures — and nothing tied them to the registry that
-// defines them. That is exactly the habit that made one rename cost a day
-// across four consumers, and the reason this SDK shipped examples teaching a
-// vocabulary the platform had already retired.
+// adapters will do. Field names must not be stated as literals independently
+// in the manifest, extract, and fixtures — nothing would then tie them to the
+// registry that defines them, and a single rename could silently break every
+// adapter still using the old name.
 //
 // So the manifest's own `produces` is checked against the CATEGORY, from the
 // installed @finsys/core, before any fixture runs. A name your service no

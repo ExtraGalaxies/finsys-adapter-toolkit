@@ -10,6 +10,6 @@ dist
 .env.local
 coverage
 
-# package-lock.json IS committed (SYS-2556): npm ci in CI needs it, and
-# a library repo's lockfile never affects consumers — npm ignores
-# dependency lockfiles on install. It must resolve from public npm only.
+# package-lock.json IS committed: npm ci in CI needs it, and a library
+# repo's lockfile never affects consumers — npm ignores dependency
+# lockfiles on install. It must resolve from public npm only.

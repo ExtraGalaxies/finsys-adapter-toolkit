@@ -1,7 +1,7 @@
-// SYS-2556: smoke suite for the published SDK surface. Exercises the
-// three exported tools against the bundled example adapters — the same
-// artifacts a partner downloads — so `npm test` guards the contract the
-// README sells. Runs with no network and no FinHero stack.
+// Smoke suite for the published SDK surface. Exercises the three exported
+// tools against the bundled example adapters — the same artifacts a partner
+// downloads — so `npm test` guards the contract the README sells. Runs with
+// no network and no FinHero stack.
 
 import { readdirSync, statSync, existsSync, readFileSync } from "node:fs"
 import { dirname, resolve } from "node:path"
@@ -164,12 +164,12 @@ describe("MockConsumer", () => {
   })
 })
 
-// SYS-3420 — the peer range and SUPPORTED_CORE_MAJORS are one fact declared
-// twice (package.json cannot be read at runtime through core's exports map, so
-// the guard carries its own copy). This holds them together: a range widened
-// without the guard, or the reverse, fails here. The range shape is this repo's
-// own convention (`>=A.B.C <N`); anything else fails CLOSED rather than being
-// half-parsed — the same posture as core's publish preflight.
+// The peer range and SUPPORTED_CORE_MAJORS are one fact declared twice
+// (package.json cannot be read at runtime through core's exports map, so the
+// guard carries its own copy). This holds them together: a range widened
+// without the guard, or the reverse, fails here. The range shape is this
+// repo's own convention (`>=A.B.C <N`); anything else fails CLOSED rather
+// than being half-parsed — the same posture as core's publish preflight.
 import { SUPPORTED_CORE_MAJORS } from "../src/coreVersionGuard.js"
 
 describe("core peer range ↔ SUPPORTED_CORE_MAJORS", () => {

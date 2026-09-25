@@ -71,8 +71,8 @@ export async function validateAdapter(dir: string): Promise<ValidateAdapterResul
   }
 
   // Cross-check: produces must be subset of category's canonical fields.
-  // SYS-3346: the vocabulary check is the thing a stale core corrupts, so the
-  // guard fires here rather than at import — it warns only when validation
+  // The vocabulary check is the thing a stale core corrupts, so the guard
+  // fires here rather than at import — it warns only when validation
   // actually happens, and names the skew before the result is trusted.
   assertSupportedCore()
   const allowed = new Set(categoryFieldsOf(manifest.category))
@@ -127,8 +127,8 @@ export async function validateAdapter(dir: string): Promise<ValidateAdapterResul
               `adapter exports category='${candidate.category}' but manifest says '${manifest.category}'`,
             )
           }
-          // SYS-2460: if adapter declares requiredIdentityFields but
-          // doesn't implement fetch(), the host can't actually use them.
+          // If adapter declares requiredIdentityFields but doesn't
+          // implement fetch(), the host can't actually use them.
           if (
             (manifest.requiredIdentityFields?.length ?? 0) > 0 &&
             typeof candidate.fetch !== "function"
