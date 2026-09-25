@@ -4,29 +4,20 @@ import { dirname, join, parse } from "node:path"
 import { fileURLToPath } from "node:url"
 
 /**
- * SYS-3346 — refuse to validate silently against a core the toolkit does not
- * support.
+ * Refuse to validate silently against a resolved `@finsys/core` this toolkit
+ * does not support.
  *
- * WHY THIS EXISTS, and it is not defensive programming.
+ * `@finsys/core` is a peerDependency, so npm should resolve exactly one copy
+ * in a partner's tree. This guard covers the case where that isn't true: a
+ * partner who ignores the peer warning, or a workspace that hoists something
+ * unexpected, ends up validating against a different major than the one
+ * their service actually runs. The failure is silent either way: a correct
+ * manifest field can be rejected because the resolved core's registry never
+ * had it, and a retired field can be accepted because that registry still
+ * does.
  *
- * The toolkit used to declare `@finsys/core` as an ordinary DEPENDENCY, pinned
- * `^4.8.0`. npm resolves that by NESTING: a partner who installs both the
- * toolkit and a current core ends up with two copies in one tree — theirs at
- * the current major, and the toolkit's at 4.x. `validateAdapter` then calls
- * `categoryFieldsOf()` against the STALE one, so it checks a partner's
- * manifest against a two-major-old vocabulary.
- *
- * The failure is symmetric and both halves are silent: a correct manifest is
- * rejected for naming a field the old registry never had, and an obsolete one
- * is accepted because the old registry still has it. Nothing anywhere says two
- * registries are in play.
- *
- * The pin is now a peerDependency, which makes nesting impossible — npm
- * installs one core, the partner's. This guard covers what the peer range
- * cannot: a partner who ignores the peer warning, or a workspace that hoists
- * something unexpected. It reads the version ACTUALLY RESOLVED at runtime
- * rather than the one requested, because those are exactly the cases where
- * they differ.
+ * This reads the version ACTUALLY RESOLVED at runtime rather than the one
+ * requested, because those are exactly the cases where they differ.
  */
 
 const require_ = createRequire(import.meta.url)
@@ -46,13 +37,12 @@ const require_ = createRequire(import.meta.url)
  */
 // Must agree with package.json's peerDependencies["@finsys/core"] — the two
 // are one fact declared twice, and tests/toolkit.test.ts holds them together.
-// 8: core 8.0.0 removed only its survey-core re-exports (SYS-3420); the
-// adapter vocabulary this toolkit reads is byte-identical to 7.10.0's.
+// 8: core 8.0.0 removed only its survey-core re-exports; the adapter
+// vocabulary this toolkit reads is byte-identical to 7.10.0's.
 // 9: core 9.0.0 reshapes the SUBJECT surface (SubjectSource, and the merge in
-// subjectViewFromRecords — SYS-3554/SYS-3464). This toolkit reads none of it.
-// Measured the same way 8 was, on the 9.0.0 candidate rather than assumed:
-// dist/data and dist/schema are byte-identical to published 8.1.2's, so
-// categoryFieldsOf() returns the same set under either (SYS-3555).
+// subjectViewFromRecords). This toolkit reads none of it — measured the same
+// way 8 was: dist/data and dist/schema are byte-identical to published
+// 8.1.2's, so categoryFieldsOf() returns the same set under either.
 export const SUPPORTED_CORE_MAJORS = [6, 7, 8, 9] as const
 
 /**
@@ -63,13 +53,6 @@ export const SUPPORTED_CORE_MAJORS = [6, 7, 8, 9] as const
  * obvious one and it does not work: core's `exports` map declares only ".",
  * "./schema" and "./schema/adapter-manifest", and Node enforces that map — so
  * the subpath throws ERR_PACKAGE_PATH_NOT_EXPORTED.
- *
- * That is not hypothetical. The first version of this guard used the direct
- * require, swallowed the throw, returned null, and `assertSupportedCore` then
- * returned early on every call. It was inert: a guard written to make a
- * version skew loud that could not have fired once. Caught by printing
- * `resolvedCoreVersion()` while proving the toolkit against core 7 — it said
- * `null` where it should have said `7.0.0`.
  */
 export function resolvedCoreVersion(): string | null {
   try {

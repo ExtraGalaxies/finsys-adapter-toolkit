@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// SYS-2554: generate docs/canonical-fields.md from @finsys/core's category
-// registry — the single source of truth for which canonical fields each
-// category accepts. An adapter's `produces` list must be a subset of the
-// fields listed here for its category.
+// Generate docs/canonical-fields.md from @finsys/core's category registry —
+// the single source of truth for which canonical fields each category
+// accepts. An adapter's `produces` list must be a subset of the fields
+// listed here for its category.
 //
 // Run: npm run docs:canonical-fields  (regenerate after a @finsys/core bump)
 

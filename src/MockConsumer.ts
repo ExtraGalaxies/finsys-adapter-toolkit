@@ -117,10 +117,6 @@ export class MockConsumer {
     // persistExtraction twice in one run (unusual but legal), or if
     // tests stage multiple instance batches under the same runId.
     //
-    // The older shape (drop ALL prior rows for (ihs, adapter)) gave
-    // partners green local tests + red prod surprises when the prod
-    // contract preserved current-run rows.
-    //
     // Transactional gap: prod wraps the delete + bulk-upsert in
     // `getAppManager().transaction()` so a throw mid-flight rolls
     // back. Mock is fully synchronous + has no throw paths between
