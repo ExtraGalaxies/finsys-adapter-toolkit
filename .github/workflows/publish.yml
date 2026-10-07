@@ -14,4 +14,4 @@ jobs:
     # registry-url is set, npm 12 removed the key, and the strict-npmrc
     # baseline turns the old warning into a hard error (EUNKNOWNCONFIG),
     # failing every publish from this repo.
-    uses: ExtraGalaxies/finsys-core/.github/workflows/npm-package-publish.yml@2a346a7bef0f3f153756fe0d64c7334a9d30069c
+    uses: ExtraGalaxies/finsys-core/.github/workflows/npm-package-publish.yml@ed3ce05828f20fd1b9ccb174dba072f0e9fbb974
