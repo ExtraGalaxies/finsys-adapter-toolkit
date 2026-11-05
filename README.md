@@ -129,7 +129,7 @@ the full contract.
 
 ### Responsibility for regulated use
 
-This software includes components for building credit reporting functions. Its developer, Sisters Inspire Sdn Bhd ("SI"), is not a credit reporting agency. SI runs this software only in systems it operates for itself, and does not operate it for any credit reporting agency or other operator.
+This is open-source software, and some of its modules can be used to build credit reporting functions. The modules do not guarantee compliance with any law, regulation, license condition or standard, and using them does not make a deployment compliant. Their developer, Sisters Inspire Sdn Bhd ("SI"), is not responsible for whether they are used compliantly; that responsibility belongs to whoever deploys and operates them.
 
 - **Built to requirements, not a compliance determination.** SI builds features to requirements set by the compliance and operations functions of the organizations that license the software. Implementing a requirement does not mean it satisfies any law, regulation, license condition or standard. No feature, default, validation, document or test is legal or compliance advice.
 - **The operator decides and is accountable.** The organization that deploys the software (the "operator") alone decides whether, when and how to use it in a credit reporting function, and is responsible for its compliance with the law that applies to it. That includes launching and deploying the software; setting and changing its configuration; turning features on or off; retention and deletion settings; access control; and monitoring and incident response.
