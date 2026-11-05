@@ -125,6 +125,19 @@ my-adapter/
 See `@finsys/core`'s `SourceAdapter` and `AdapterManifest` types for
 the full contract.
 
+## Disclaimer
+
+### Responsibility for regulated use
+
+This software is a toolkit for building credit reporting functions. Its developer, Sisters Inspire Sdn Bhd ("SI"), is not a credit reporting agency and does not operate this software for anyone.
+
+- **Built to requirements, not a compliance determination.** SI builds features to requirements set by the compliance and operations functions of the organizations that license the software. Implementing a requirement does not mean it satisfies any law, regulation, license condition or standard. No feature, default, validation, document or test is legal or compliance advice.
+- **The operator decides and is accountable.** The organization that deploys the software (the "operator") alone decides whether, when and how to use it in a credit reporting function, and is responsible for its compliance with the law that applies to it. That includes launching and deploying the software; setting and changing its configuration; turning features on or off; retention and deletion settings; access control; and monitoring and incident response.
+- **SI does not launch, deploy or configure operator environments.** SI engineering does not release into an operator's environment, change its configuration, or turn features on or off there. Any help SI gives is advisory; the operator makes the change under its own change control and stays responsible for it.
+- **Defaults and examples are starting points.** Default settings, sample configuration, seed data and documentation examples are engineering choices, not compliance settings. The operator reviews and sets every value before use.
+- **Test environments show capability, not compliance.** Simulated environments and test suites show that a feature works as built. They do not show that any deployment complies with anything.
+- **Warranty and liability** are as stated in the [LICENSE](./LICENSE) (Apache-2.0, sections 7 and 8).
+
 ## License
 
 Apache-2.0
